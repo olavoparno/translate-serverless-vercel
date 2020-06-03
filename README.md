@@ -9,11 +9,11 @@
 
 ### Endpoints
 
-- {POST} /translate
+- {GET, POST} /translate
 
 ### Translate
 
-- This POST accepts its payload configuration both as queryString or as body with a simple interface as follows:
+- This request accepts its payload configuration both as queryString or as body with a simple interface as follows:
 
 ```ts
 interface ITranslateOptions {
@@ -69,3 +69,7 @@ curl --location --request POST 'translate-serverless.now.sh/api/translate' \
 ### Deploy it yourself
 
 - Keep in mind that by using the lib `baidu-translate-api` you would have to setup a environment variable called `XDG_CONFIG_HOME` to `/tmp/.config/` in order to store its cookies.
+
+### Thanks
+
+- Special thanks to [Lucas Mendes](https://github.com/LucasMendesl) a.k.a. mister snack.
