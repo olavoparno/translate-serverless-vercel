@@ -1,6 +1,6 @@
 import { NowRequest, NowResponse } from '@now/node'
 import translate from 'baidu-translate-api'
-import { defaultHtml } from './defaults'
+import { defaultHtml } from '../constants'
 
 interface ITranslateOptions {
   message: string

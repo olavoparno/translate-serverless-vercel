@@ -1,5 +1,5 @@
 import { NowRequest, NowResponse } from '@now/node'
-import { defaultHtml } from './defaults'
+import { defaultHtml } from '../constants'
 
 export default (req: NowRequest, res: NowResponse) => {
   if (req.method !== 'GET') {
