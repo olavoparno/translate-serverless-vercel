@@ -38,7 +38,7 @@ const requestOptions = {
   redirect: 'follow',
 }
 
-fetch('translate-serverless.now.sh/translate', requestOptions)
+fetch('translate-serverless.now.sh/api/translate', requestOptions)
   .then((response) => response.text())
   .then((result) => console.log(result))
   .catch((error) => console.log('error', error))
@@ -50,14 +50,14 @@ const requestOptions = {
   redirect: 'follow',
 }
 
-fetch('translate-serverless.now.sh/translate?message=Pedro%20gatinho&from=pt&to=en', requestOptions)
+fetch('translate-serverless.now.sh/api/translate?message=Pedro%20gatinho&from=pt&to=en', requestOptions)
   .then((response) => response.text())
   .then((result) => console.log(result))
   .catch((error) => console.log('error', error))
 ```
 
 ```sh
-curl --location --request GET 'translate-serverless.now.sh/translate' \
+curl --location --request GET 'translate-serverless.now.sh/api/translate' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 	"message": "Translate me now!!!",
