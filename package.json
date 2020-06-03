@@ -1,0 +1,33 @@
+{
+  "name": "translate-serverless-now",
+  "version": "1.0.0",
+  "description": "Translate API Vercel Serverless Functions",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --color",
+    "prettier": "prettier --write 'api/**/*.ts'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olavoparno/translate-serverless-now.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/olavoparno/translate-serverless-now/issues"
+  },
+  "homepage": "https://github.com/olavoparno/translate-serverless-now#readme",
+  "dependencies": {
+    "@now/node": "^1.6.1",
+    "baidu-translate-api": "^0.4.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.1.0",
+    "@typescript-eslint/parser": "^3.1.0",
+    "eslint": "^7.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "prettier": "^2.0.5"
+  }
+}
