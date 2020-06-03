@@ -9,7 +9,7 @@
 
 ### Endpoints
 
-- {GET, POST} /translate
+- {GET} /translate
 
 ### Translate
 
@@ -29,10 +29,10 @@ interface ITranslateOptions {
 const myHeaders = new Headers()
 myHeaders.append('Content-Type', 'application/json')
 
-const raw = JSON.stringify({ message: 'Translate me now!', from: 'auto', to: 'pt' })
+const raw = JSON.stringify({ message: 'Translate me now!!!', from: 'auto', to: 'pt' })
 
 const requestOptions = {
-  method: 'POST',
+  method: 'GET',
   headers: myHeaders,
   body: raw,
   redirect: 'follow',
@@ -46,7 +46,7 @@ fetch('translate-serverless.now.sh/api/translate', requestOptions)
 
 ```js
 const requestOptions = {
-  method: 'POST',
+  method: 'GET',
   redirect: 'follow',
 }
 
@@ -57,7 +57,7 @@ fetch('translate-serverless.now.sh/api/translate?message=Pedro%20gatinho&from=pt
 ```
 
 ```sh
-curl --location --request POST 'translate-serverless.now.sh/api/translate' \
+curl --location --request GET 'translate-serverless.now.sh/api/translate' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 	"message": "Translate me now!!!",

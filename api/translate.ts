@@ -25,11 +25,12 @@ function resolveTranslateOptions(req: NowRequest) {
 }
 
 export default (req: NowRequest, res: NowResponse) => {
-  if (req.method !== 'POST') {
+  if (req.method !== 'GET') {
     return res.status(404).json({
       message: 'Resource not found',
     })
   }
+  res.setHeader('Cache-Control', 'max-age=0, s-maxage=2612345')
   const { message, from, to }: ITranslateOptions = resolveTranslateOptions(req)
 
   if (from === to) {

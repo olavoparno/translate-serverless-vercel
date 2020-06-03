@@ -7,6 +7,7 @@ export default (req: NowRequest, res: NowResponse) => {
       message: 'Resource not found',
     })
   }
+  res.setHeader('Cache-Control', 'max-age=0, s-maxage=2612345')
   res.writeHead(418, { 'Content-Type': 'text/html' })
   res.end(defaultHtml)
 }
