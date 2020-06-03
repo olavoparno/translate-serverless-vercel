@@ -69,7 +69,3 @@ curl --location --request POST 'translate-serverless.now.sh/api/translate' \
 ### Deploy it yourself
 
 - Keep in mind that by using the lib `baidu-translate-api` you would have to setup a environment variable called `XDG_CONFIG_HOME` to `/tmp/.config/` in order to store its cookies.
-
-<a href="/import/project?template=https://github.com/vercel/vercel/tree/master/examples/vanilla-pusher-functions">
-  <img src="https://vercel.com/button" alt="Deploy" />
-</a>
