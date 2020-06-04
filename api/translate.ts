@@ -1,10 +1,11 @@
+import fs from 'fs'
+import path from 'path'
 import { NowRequest, NowResponse } from '@now/node'
 import translate from 'baidu-translate-api'
-import { defaultHtml } from '../constants'
 import { useRedis } from '../redis'
 import { ITranslateOptions, ITranslateResponse } from '..'
 
-function resolveTranslateOptions(req: NowRequest) {
+function resolveTranslateOptions(req: NowRequest, res: NowResponse) {
   if (Object.keys(req.body || {}).length > 0) {
     return req.body
   }
@@ -13,27 +14,27 @@ function resolveTranslateOptions(req: NowRequest) {
     return req.query
   }
 
-  return {
-    message: 'Translate now!',
-    from: 'auto',
-    to: 'auto',
-  }
+  res.status(405).json({
+    information: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-now',
+  })
 }
 
 export default (req: NowRequest, res: NowResponse): NowResponse | void => {
   const redisClient = useRedis()
   if (req.method !== 'GET') {
-    return res.status(405).json({
+    res.status(405).json({
       information: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-now',
     })
   }
 
   res.setHeader('Cache-Control', 'max-age=0, s-maxage=60')
 
-  const { message, from, to }: ITranslateOptions = resolveTranslateOptions(req)
+  const { message, from, to }: ITranslateOptions = resolveTranslateOptions(req, res)
+
+  console.log('options', message, from, to)
 
   if (from === to) {
-    return res.status(200).json({
+    res.status(200).json({
       information: 'No translation made.',
       translation: {
         from,
@@ -46,16 +47,16 @@ export default (req: NowRequest, res: NowResponse): NowResponse | void => {
     })
   }
 
-  redisClient.on('error', function (error) {
+  redisClient.on('error', (error) => {
     console.error('redisError', error)
   })
 
-  redisClient.hgetall('translationCache', function (err, cacheObject) {
-    if (!cacheObject) return
+  redisClient.hgetall('translationCache', (error, cacheObject) => {
+    if (!cacheObject || error) return
 
     const { cFrom, cTo, cSrc, cDst } = cacheObject
     if (cSrc === message && cFrom === from && cTo === to) {
-      return res.status(200).json({
+      res.status(200).json({
         information: 'From cache!',
         translation: {
           from: cFrom,
@@ -74,20 +75,33 @@ export default (req: NowRequest, res: NowResponse): NowResponse | void => {
     to,
   })
     .then((response: ITranslateResponse) => {
-      redisClient.hmset('translationCache', {
-        cFrom: from,
-        cTo: to,
-        cSrc: response.trans_result.src,
-        cDst: response.trans_result.dst,
-      })
-      return res.status(200).json({
-        information: 'Translation successful!',
-        translation: response,
-      })
+      redisClient.hmset(
+        'translationCache',
+        {
+          cFrom: from,
+          cTo: to,
+          cSrc: response.trans_result.src,
+          cDst: response.trans_result.dst,
+        },
+        () => {
+          res.status(200).json({
+            information: 'Translation successful!',
+            translation: response,
+          })
+        },
+      )
     })
     .catch(() => {
       res.writeHead(418, { 'Content-Type': 'text/html' })
-      return res.end(defaultHtml)
+      fs.readFile(path.join(__dirname, '../index.html'), null, (error, data) => {
+        if (error) {
+          res.writeHead(404)
+          res.write('Whoops! File not found!')
+        } else {
+          res.write(data)
+        }
+        res.end()
+      })
     })
     .finally(() => {
       redisClient.expire('translationCache', 2612345)
