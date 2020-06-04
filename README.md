@@ -19,13 +19,24 @@
 
 ### Translate
 
-- This request accepts its payload configuration both as queryString or as body with a simple interface as follows:
+- This request accepts its payload configuration both as queryString or as body.
+- See below the request and response respective interfaces.
 
 ```ts
-interface ITranslateOptions {
+export interface ITranslateOptions {
   message: string
   from: string
   to: string
+}
+
+export interface ITranslateResponse {
+  information: string
+  from: string
+  to: string
+  trans_result: {
+    dst: string
+    src: string
+  }
 }
 ```
 
@@ -56,7 +67,7 @@ const requestOptions = {
   redirect: 'follow',
 }
 
-fetch('translate-serverless.now.sh/api/translate?message=Pedro%20gatinho&from=pt&to=en', requestOptions)
+fetch('translate-serverless.now.sh/api/translate?message=Translate%20me%20now!!!&from=auto&to=pt', requestOptions)
   .then((response) => response.text())
   .then((result) => console.log(result))
   .catch((error) => console.log('error', error))
@@ -70,6 +81,42 @@ curl --location --request GET 'translate-serverless.now.sh/api/translate' \
     "from": "auto",
     "to": "pt"
 }'
+```
+
+### Current supported languages abbreviations
+
+```js
+const languages = {
+  Auto: 'auto',
+  Chinese: 'zh',
+  English: 'en',
+  Cantonese: 'yue',
+  ClassicalChinese: 'wyw',
+  Japanese: 'jp',
+  Korean: 'kor',
+  French: 'fra',
+  Spanish: 'spa',
+  Thai: 'th',
+  Arabic: 'ara',
+  Russian: 'ru',
+  Portuguese: 'pt',
+  German: 'de',
+  Italian: 'it',
+  Greek: 'el',
+  Dutch: 'nl',
+  Polish: 'pl',
+  Bulgarian: 'bul',
+  Estonian: 'est',
+  Danish: 'dan',
+  Finnish: 'fin',
+  Czech: 'cs',
+  Romanian: 'rom',
+  Slovenia: 'slo',
+  Swedish: 'swe',
+  Hungarian: 'hu',
+  TraditionalChinese: 'cht',
+  Vietnamese: 'vie',
+}
 ```
 
 ### Thanks
