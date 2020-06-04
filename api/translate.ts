@@ -59,7 +59,12 @@ export default (req: NowRequest, res: NowResponse) => {
       return res.status(200).json({
         message: 'From cache!',
         translation: {
-          ...cacheObject,
+          from,
+          to,
+          trans_result: {
+            dst: message,
+            src: message,
+          },
         },
       })
     }
