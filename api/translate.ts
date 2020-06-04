@@ -1,6 +1,8 @@
 import { NowRequest, NowResponse } from '@now/node'
 import translate from 'baidu-translate-api'
+
 import { defaultHtml } from '../constants'
+import { useRedis } from '../redis'
 
 interface ITranslateOptions {
   message: string
@@ -25,9 +27,10 @@ function resolveTranslateOptions(req: NowRequest) {
 }
 
 export default (req: NowRequest, res: NowResponse) => {
+  const { redisClient } = useRedis()
   if (req.method !== 'GET') {
-    return res.status(404).json({
-      message: 'Resource not found',
+    return res.status(405).json({
+      message: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-now',
     })
   }
   res.setHeader('Cache-Control', 'max-age=0, s-maxage=2612345')
@@ -40,25 +43,49 @@ export default (req: NowRequest, res: NowResponse) => {
         from,
         to,
         trans_result: {
-          src: message,
           dst: message,
+          src: message,
         },
       },
     })
   }
+
+  redisClient.on('error', function (error) {
+    console.error('redisError', error)
+  })
+
+  redisClient.hgetall('translationCache', function (err, cacheObject) {
+    if (cacheObject && cacheObject.message === message && cacheObject.from === from && cacheObject.to === to) {
+      return res.status(200).json({
+        message: 'From cache!',
+        translation: {
+          ...cacheObject,
+        },
+      })
+    }
+  })
 
   translate(message, {
     from,
     to,
   })
     .then((response) => {
-      return res.status(201).json({
+      redisClient.hmset('translationCache', {
+        message,
+        from,
+        to,
+      })
+      redisClient.expire('translationCache', 2612345)
+      return res.status(200).json({
         message: 'Translation successful!',
         translation: response,
       })
     })
     .catch(() => {
-      res.writeHead(418, { 'Content-Type': 'text/plain' })
+      res.writeHead(418, { 'Content-Type': 'text/html' })
       return res.end(defaultHtml)
+    })
+    .finally(() => {
+      redisClient.quit()
     })
 }
