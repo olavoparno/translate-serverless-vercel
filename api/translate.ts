@@ -50,7 +50,9 @@ export default (req: NowRequest, res: NowResponse): NowResponse | void => {
     console.error('redisError', error)
   })
 
-  redisClient.hgetall('translationCache', function (err, cacheObject = {}) {
+  redisClient.hgetall('translationCache', function (err, cacheObject) {
+    if (!cacheObject) return
+
     const { cFrom, cTo, cSrc, cDst } = cacheObject
     if (cSrc === message && cFrom === from && cTo === to) {
       return res.status(200).json({
