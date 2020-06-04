@@ -33,7 +33,7 @@ export default (req: NowRequest, res: NowResponse) => {
       message: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-now',
     })
   }
-  res.setHeader('Cache-Control', 'max-age=0, s-maxage=2612345')
+  res.setHeader('Cache-Control', 'max-age=0, s-maxage=60')
   const { message, from, to }: ITranslateOptions = resolveTranslateOptions(req)
 
   if (from === to) {
