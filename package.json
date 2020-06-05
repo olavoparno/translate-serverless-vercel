@@ -21,7 +21,8 @@
   "dependencies": {
     "@now/node": "^1.6.1",
     "baidu-translate-api": "^0.4.0",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@types/redis": "^2.8.22",
