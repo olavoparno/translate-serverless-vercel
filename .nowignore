@@ -4,3 +4,4 @@ LICENSE
 .eslintrc.js
 .vscode
 package-lock.json
+_config.yml

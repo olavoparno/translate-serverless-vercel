@@ -6,113 +6,31 @@ import { RedisManager } from '../redis'
 import { Logger } from '../logging/logger'
 import { ITranslateOptions, ITranslateResponse } from '..'
 
-function resolveTranslateOptions(req: NowRequest, res: NowResponse) {
-  if (Object.keys(req.body || {}).length > 0) {
-    return req.body
-  }
-
-  if (Object.keys(req.query || {}).length > 0) {
-    return req.query
-  }
-
-  res.status(405).json({
-    information: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-now',
-  })
-}
-
-export default (req: NowRequest, res: NowResponse): NowResponse | void => {
-  const redisClient = RedisManager()
-
-  res.on('close', () => {
-    Logger.info('TransactionClosed <')
-    redisClient.quit()
-  })
-
-  if (req.method !== 'GET') {
-    res.status(405).json({
-      information: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-now',
-    })
-  }
-
-  res.setHeader('Cache-Control', 'max-age=0, s-maxage=60')
-
-  const { message, from, to }: ITranslateOptions = resolveTranslateOptions(req, res)
-
-  Logger.info('TranslateOptions >')
-  Logger.info(JSON.stringify({ message, from, to }))
-
-  if (from === to) {
-    Logger.info('NoTranslationMade >')
-    Logger.info(JSON.stringify({ message, from, to }))
-
-    res.status(200).json({
-      information: 'No translation made.',
-      translation: {
-        from,
-        to,
-        trans_result: {
-          dst: message,
-          src: message,
-        },
-      },
-    })
-  }
-
-  redisClient.on('error', (error) => {
-    Logger.error('RedisClientOnError >')
-    Logger.error(JSON.stringify(error))
-  })
-
-  redisClient.hgetall('translationCache', (error, cacheObject) => {
-    if (!cacheObject || error) {
-      Logger.error('RedisHgetAllError >')
-      Logger.error(JSON.stringify(error))
-
-      return false
-    }
-
-    const { cFrom, cTo, cSrc, cDst } = cacheObject
-
-    if (cSrc === message && cFrom === from && cTo === to) {
-      Logger.info('TranslationFromCache >')
-      Logger.info(JSON.stringify({ ...cacheObject }))
-
-      res.status(200).json({
-        information: 'From cache!',
-        translation: {
-          from: cFrom,
-          to: cTo,
-          trans_result: {
-            dst: cDst,
-            src: cSrc,
-          },
-        },
-      })
-    }
-  })
-
-  translate(message, {
+function runTranslate(res, redisClient, { message, from, to }) {
+  return translate(message, {
     from,
     to,
   })
     .then((response: ITranslateResponse) => {
-      redisClient
-        .hmset('translationCache', {
-          cFrom: from,
-          cTo: to,
-          cSrc: response.trans_result.src,
-          cDst: response.trans_result.dst,
-          EX: 2612345,
-        })
-        .then(() => {
-          Logger.info('RedisHmSetCallback >')
-          Logger.info(JSON.stringify(response))
+      const {
+        trans_result: { dst, src },
+      } = response
 
-          res.status(200).json({
-            information: 'Translation successful!',
-            translation: response,
-          })
+      const setKey = JSON.stringify({
+        cFrom: from,
+        cTo: to,
+        cSrc: src,
+      })
+
+      redisClient.set(setKey, dst, 'ex', 2612345).then(() => {
+        Logger.info('RedisHmSetCallback >')
+        Logger.info(JSON.stringify(response))
+
+        return res.status(200).json({
+          information: 'Translation successful!',
+          translation: response,
         })
+      })
     })
     .catch((error) => {
       Logger.error('TranslationFailure >')
@@ -130,7 +48,97 @@ export default (req: NowRequest, res: NowResponse): NowResponse | void => {
         } else {
           res.write(data)
         }
-        res.end()
+
+        return res.end()
       })
     })
+}
+
+function returnNotAllowed(res: NowResponse) {
+  return res.status(405).json({
+    information: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-now',
+  })
+}
+
+function resolveTranslateOptions(req: NowRequest, res: NowResponse) {
+  if (Object.keys(req.body || {}).length > 0) {
+    return req.body
+  }
+
+  if (Object.keys(req.query || {}).length > 0) {
+    return req.query
+  }
+
+  returnNotAllowed(res)
+}
+
+export default (req: NowRequest, res: NowResponse): NowResponse | void => {
+  const redisClient = RedisManager()
+
+  res.on('close', () => {
+    Logger.info('TransactionClosed <')
+  })
+
+  if (req.method !== 'GET') {
+    returnNotAllowed(res)
+  }
+
+  const { message, from, to }: ITranslateOptions = resolveTranslateOptions(req, res)
+
+  Logger.info('TranslateOptions >')
+  Logger.info(JSON.stringify({ message, from, to }))
+
+  if (from === to) {
+    Logger.info('NoTranslationMade >')
+    Logger.info(JSON.stringify({ message, from, to }))
+
+    return res.status(200).json({
+      information: 'No translation made.',
+      translation: {
+        from,
+        to,
+        trans_result: {
+          dst: message,
+          src: message,
+        },
+      },
+    })
+  }
+
+  redisClient.on('error', (error) => {
+    Logger.error('RedisClientOnError >')
+    Logger.error(JSON.stringify(error))
+  })
+
+  const getKey = JSON.stringify({ cFrom: from, cTo: to, cSrc: message })
+
+  redisClient.get(getKey, (error, cacheString) => {
+    if (error) {
+      Logger.error('RedisHgetAllError >')
+      Logger.error(JSON.stringify(error))
+
+      return false
+    }
+
+    if (!cacheString) {
+      return false
+    }
+
+    Logger.info('TranslationFromCache >')
+    Logger.info(cacheString)
+
+    return res.status(200).json({
+      information: 'From cache!',
+      translation: {
+        from: from,
+        to: to,
+        trans_result: {
+          dst: cacheString,
+          src: message,
+        },
+      },
+    })
+  })
+
+  runTranslate(res, redisClient, { message, from, to })
 }
