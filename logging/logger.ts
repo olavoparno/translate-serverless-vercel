@@ -4,7 +4,6 @@ import { config, combineLogFormats } from './format-levels'
 const { colors, customFormat } = config
 
 export const Logger = createLogger({
-  level: 'info',
   defaultMeta: {
     projectLabel: 'Translate Serverless Now',
   },
