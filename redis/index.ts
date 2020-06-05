@@ -1,7 +1,7 @@
-import redis, { RedisClient } from 'redis'
+import Redis from 'ioredis'
 
-export function Redis(): RedisClient {
-  const redisClient = redis.createClient({
+export function RedisManager(): Redis.Redis {
+  const redisClient = new Redis({
     host: process.env.REDIS_HOST,
     password: process.env.REDIS_PW,
     port: (process.env.REDIS_PORT as unknown) as number,

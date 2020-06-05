@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { NowRequest, NowResponse } from '@now/node'
 import translate from 'baidu-translate-api'
-import { Redis } from '../src/redis'
+import { RedisManager } from '../redis'
 import { Logger } from '../logging/logger'
 import { ITranslateOptions, ITranslateResponse } from '..'
 
@@ -21,7 +21,7 @@ function resolveTranslateOptions(req: NowRequest, res: NowResponse) {
 }
 
 export default (req: NowRequest, res: NowResponse): NowResponse | void => {
-  const redisClient = Redis()
+  const redisClient = RedisManager()
 
   res.on('close', () => {
     Logger.info('TransactionClosed <')
@@ -75,7 +75,7 @@ export default (req: NowRequest, res: NowResponse): NowResponse | void => {
 
     if (cSrc === message && cFrom === from && cTo === to) {
       Logger.info('TranslationFromCache >')
-      Logger.info(JSON.stringify({ message, from, to }))
+      Logger.info(JSON.stringify({ ...cacheObject }))
 
       res.status(200).json({
         information: 'From cache!',
@@ -96,15 +96,15 @@ export default (req: NowRequest, res: NowResponse): NowResponse | void => {
     to,
   })
     .then((response: ITranslateResponse) => {
-      redisClient.hmset(
-        'translationCache',
-        {
+      redisClient
+        .hmset('translationCache', {
           cFrom: from,
           cTo: to,
           cSrc: response.trans_result.src,
           cDst: response.trans_result.dst,
-        },
-        () => {
+          EX: 2612345,
+        })
+        .then(() => {
           Logger.info('RedisHmSetCallback >')
           Logger.info(JSON.stringify(response))
 
@@ -112,8 +112,7 @@ export default (req: NowRequest, res: NowResponse): NowResponse | void => {
             information: 'Translation successful!',
             translation: response,
           })
-        },
-      )
+        })
     })
     .catch((error) => {
       Logger.error('TranslationFailure >')
