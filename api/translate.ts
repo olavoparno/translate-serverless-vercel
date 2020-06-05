@@ -121,7 +121,7 @@ export default (req: NowRequest, res: NowResponse): NowResponse | void => {
 
       res.writeHead(418, { 'Content-Type': 'text/html' })
 
-      fs.readFile(path.join(__dirname, '../index.html'), null, (fsError, data) => {
+      fs.readFile(path.join(__dirname, '../public/index.html'), null, (fsError, data) => {
         if (fsError) {
           Logger.error('ReadHTMLFailure >')
           Logger.error(JSON.stringify(fsError))

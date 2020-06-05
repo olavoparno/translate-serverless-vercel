@@ -12,7 +12,7 @@ export default (req: NowRequest, res: NowResponse): NowResponse | void => {
 
   res.writeHead(418, { 'Content-Type': 'text/html', 'Cache-Control': 'max-age=0, s-maxage=2612345' })
 
-  fs.readFile(path.join(__dirname, '../index.html'), null, (error, data) => {
+  fs.readFile(path.join(__dirname, '../public/index.html'), null, (error, data) => {
     if (error) {
       Logger.error(error)
 
