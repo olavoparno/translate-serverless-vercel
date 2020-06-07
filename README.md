@@ -49,12 +49,13 @@ fetch('https://translate-serverless.now.sh/api/translate', {
   headers: {
     'content-type': 'application/json',
   },
-  body: {
+  body: JSON.stringify({
     message: 'Translate me now!',
     from: 'en',
     to: 'pt',
-  },
+  }),
 })
+  .then((data) => data.json())
   .then((response) => {
     console.log(response)
   })
