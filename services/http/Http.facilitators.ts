@@ -22,10 +22,10 @@ export const returnEndpointPayload = ({ req, res }: { req: NowRequest; res: NowR
   })
 }
 
-export const returnHtmlPage = (res: NowResponse): void => {
+export const returnHtmlPage = ({ res }: { res: NowResponse }): void => {
   res.writeHead(418, { 'Content-Type': 'text/html', 'Cache-Control': 'max-age=0, s-maxage=2612345' })
 
-  return fs.readFile(path.join(__dirname, '../public/index.html'), null, (fsError, data) => {
+  return fs.readFile(path.join(__dirname, '../../public/index.html'), null, (fsError, data) => {
     if (fsError) {
       Logger.error('> ReadHTMLFailure::')
       Logger.error(JSON.stringify(fsError))
@@ -61,4 +61,13 @@ export const transformRequest = (req: NowRequest, res: NowResponse): { req: NowR
   })
 
   return { req, res }
+}
+
+export const handleRejections = (res: NowResponse) => (error: Error): void => {
+  const parsedError = JSON.parse(error.toString().replace('Error: ', ''))
+
+  Logger.info('> HandleRejections::')
+  Logger.info(JSON.stringify(parsedError))
+
+  returnHttpJson(res, parsedError.status, parsedError.data)
 }

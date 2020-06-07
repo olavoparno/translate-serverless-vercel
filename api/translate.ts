@@ -1,11 +1,21 @@
+import { chain } from '@amaurymartiny/now-middleware'
 import { NowRequest, NowResponse } from '@now/node'
+
+import cors from 'cors'
+import morgan from 'morgan'
 import Bluebird from 'bluebird'
+
 import { Logger } from '../services/logging/Logging.logger'
-import { returnEndpointPayload, transformRequest, returnHttpJson } from '../services/http/Http.facilitators'
+import {
+  returnEndpointPayload,
+  transformRequest,
+  returnHttpJson,
+  handleRejections,
+} from '../services/http/Http.facilitators'
 import { translateTriage, translateService } from '../services/translator/Translator.service'
 import { redisGet, redisSet } from '../services/redis/Redis.actions'
 
-export default (req: NowRequest, res: NowResponse): NowResponse | void => {
+const handler = (req: NowRequest, res: NowResponse) => {
   Bluebird.resolve(transformRequest(req, res))
     .then(returnEndpointPayload)
     .tap((translateData) => {
@@ -41,11 +51,4 @@ export default (req: NowRequest, res: NowResponse): NowResponse | void => {
     .catch(handleRejections(res))
 }
 
-const handleRejections = (res) => (error) => {
-  const parsedError = JSON.parse(error.toString().replace('Error: ', ''))
-
-  Logger.info('> HandleRejections::')
-  Logger.info(JSON.stringify(parsedError))
-
-  returnHttpJson(res, parsedError.status, parsedError.data)
-}
+export default chain(cors(), morgan('common'))(handler)
