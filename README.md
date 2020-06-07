@@ -22,8 +22,6 @@
 - This request accepts its payload configuration both as queryString or as body.
 - See below the request and response respective interfaces.
 
-- Try it in your browser https://translate-serverless.now.sh/api/translate?message=Translate%20me%20now!!!&from=auto&to=pt
-
 ```ts
 interface ITranslateOptions {
   message: string
