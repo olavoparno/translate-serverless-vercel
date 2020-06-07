@@ -4,12 +4,13 @@ export interface ITranslateOptions {
   to: string
 }
 
+export interface ITransResult {
+  dst: string
+  src: string
+}
+
 export interface ITranslateResponse {
-  information: string
   from: string
   to: string
-  trans_result: {
-    dst: string
-    src: string
-  }
+  trans_result: ITransResult
 }

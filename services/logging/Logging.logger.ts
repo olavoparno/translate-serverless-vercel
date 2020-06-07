@@ -1,5 +1,5 @@
 import { transports, createLogger } from 'winston'
-import { config, combineLogFormats } from './format-levels'
+import { config, combineLogFormats } from './Logging.format-levels'
 
 const { colors, customFormat } = config
 
