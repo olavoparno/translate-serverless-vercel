@@ -41,7 +41,7 @@ export const returnHtmlPage = (res: NowResponse): void => {
 }
 
 export const transformRequest = (req: NowRequest, res: NowResponse): { req: NowRequest; res: NowResponse } => {
-  if (req.method !== 'GET') {
+  if (req.method !== 'POST') {
     returnHttpJson(res, 405, {
       information: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-now',
     })

@@ -15,7 +15,7 @@
 
 ### Endpoints
 
-- {GET} /translate
+- {POST} /translate
 
 ### Translate
 
@@ -25,63 +25,54 @@
 - Try it in your browser https://translate-serverless.now.sh/api/translate?message=Translate%20me%20now!!!&from=auto&to=pt
 
 ```ts
-export interface ITranslateOptions {
+interface ITranslateOptions {
   message: string
   from: string
   to: string
 }
 
-export interface ITranslateResponse {
-  information: string
+interface ITransResult {
+  dst: string
+  src: string
+}
+
+interface ITranslateResponse {
   from: string
   to: string
-  trans_result: {
-    dst: string
-    src: string
-  }
+  trans_result: ITransResult
 }
 ```
 
 - Examples:
 
 ```js
-const myHeaders = new Headers()
-myHeaders.append('Content-Type', 'application/json')
-
-const raw = JSON.stringify({ message: 'Translate me now!!!', from: 'auto', to: 'pt' })
-
-const requestOptions = {
-  method: 'GET',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow',
-}
-
-fetch('translate-serverless.now.sh/api/translate', requestOptions)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.log('error', error))
-```
-
-```js
-const requestOptions = {
-  method: 'GET',
-  redirect: 'follow',
-}
-
-fetch('translate-serverless.now.sh/api/translate?message=Translate%20me%20now!!!&from=auto&to=pt', requestOptions)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.log('error', error))
+fetch('https://translate-serverless.now.sh/api/translate', {
+  method: 'POST',
+  headers: {
+    'content-type': 'application/json',
+  },
+  body: {
+    message: 'Translate me now!',
+    from: 'en',
+    to: 'pt',
+  },
+})
+  .then((response) => {
+    console.log(response)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
 ```
 
 ```sh
-curl --location --request GET 'translate-serverless.now.sh/api/translate' \
---header 'Content-Type: application/json' \
---data-raw '{
-	"message": "Translate me now!!!",
-    "from": "auto",
-    "to": "pt"
+curl --request POST \
+  --url https://translate-serverless.now.sh/api/translate \
+  --header 'content-type: application/json' \
+  --data '{
+	"message": "Translate me now!",
+	"from": "en",
+	"to": "pt"
 }'
 ```
 
