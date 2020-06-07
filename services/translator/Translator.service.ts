@@ -2,7 +2,7 @@ import translate from 'baidu-translate-api'
 import { Logger } from '../logging/Logging.logger'
 import { ITranslateResponse, ITranslateOptions } from '../..'
 
-export const translateService = ({ message, from, to }: ITranslateOptions): Promise<ITranslateResponse> => {
+export const translateService = ({ message, from, to }: ITranslateOptions): Promise<ITranslateResponse | Error> => {
   return new Promise((resolve, reject) => {
     return translate(message, {
       from,
@@ -16,7 +16,7 @@ export const translateService = ({ message, from, to }: ITranslateOptions): Prom
               status: 500,
               data: {
                 information: 'Internal server error.',
-                complementary: JSON.stringify(error),
+                complementary: error,
               },
             }),
           ),

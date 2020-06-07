@@ -8,17 +8,27 @@ export const returnHttpJson = (res: NowResponse, status: number, payload: unknow
   return res.status(status).json(payload)
 }
 
-export const returnEndpointPayload = ({ req, res }: { req: NowRequest; res: NowResponse }): ITranslateOptions => {
-  if (Object.keys(req.body || {}).length > 0) {
-    return req.body as ITranslateOptions
-  }
+export const returnEndpointPayload = ({ req }: { req: NowRequest }): Promise<ITranslateOptions> => {
+  return new Promise((resolve, reject) => {
+    if (Object.keys(req.body || {}).length > 0) {
+      resolve(req.body as ITranslateOptions)
+    }
 
-  if (Object.keys(req.query || {}).length > 0) {
-    return (req.query as unknown) as ITranslateOptions
-  }
+    if (Object.keys(req.query || {}).length > 0) {
+      resolve((req.query as unknown) as ITranslateOptions)
+    }
 
-  returnHttpJson(res, 405, {
-    information: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-now',
+    reject(
+      new Error(
+        JSON.stringify({
+          status: 400,
+          data: {
+            information: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-now',
+            complementary: 'Tip: you should review your payload information',
+          },
+        }),
+      ),
+    )
   })
 }
 
@@ -40,27 +50,38 @@ export const returnHtmlPage = ({ res }: { res: NowResponse }): void => {
   })
 }
 
-export const transformRequest = (req: NowRequest, res: NowResponse): { req: NowRequest; res: NowResponse } => {
-  if (req.method !== 'POST') {
-    returnHttpJson(res, 405, {
-      information: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-now',
+export const transformRequest = (
+  req: NowRequest,
+  res: NowResponse,
+  method?: string,
+): Promise<{ req: NowRequest; res: NowResponse }> => {
+  return new Promise((resolve, reject) => {
+    req.on('data', () => {
+      Logger.info('> TransactionOpened::')
     })
-  }
+    res.on('close', () => {
+      Logger.info('> TransactionClosed')
+    })
+    res.on('error', (error) => {
+      Logger.error('> TransactionError::')
+      Logger.error(JSON.stringify(error))
+    })
 
-  req.on('data', () => {
-    Logger.info('> TransactionOpened::')
+    if (req.method !== (method || 'POST')) {
+      reject(
+        new Error(
+          JSON.stringify({
+            status: 405,
+            data: {
+              information: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-now',
+            },
+          }),
+        ),
+      )
+    }
+
+    resolve({ req, res })
   })
-
-  res.on('close', () => {
-    Logger.info('> TransactionClosed')
-  })
-
-  res.on('error', (error) => {
-    Logger.error('> TransactionError::')
-    Logger.error(JSON.stringify(error))
-  })
-
-  return { req, res }
 }
 
 export const handleRejections = (res: NowResponse) => (error: Error): void => {

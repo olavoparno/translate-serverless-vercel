@@ -18,7 +18,7 @@ export const redisGet = ({ message, from, to }: ITranslateOptions): Promise<stri
             data: {
               information: 'From cache.',
               translation: {
-                normalizedFrom,
+                from: normalizedFrom,
                 to,
                 trans_result: {
                   dst: redisReturn,
