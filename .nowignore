@@ -5,3 +5,6 @@ LICENSE
 .vscode
 package-lock.json
 _config.yml
+CHANGELOG.md
+index.d.ts
+.gitignore

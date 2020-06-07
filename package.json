@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --color",
-    "prettier": "prettier --write 'api/**/*.ts'"
+    "prettier": "prettier --write 'api/**/*.ts'",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,11 @@
     "url": "https://github.com/olavoparno/translate-serverless-now/issues"
   },
   "homepage": "https://github.com/olavoparno/translate-serverless-now#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
   "dependencies": {
     "@amaurymartiny/now-middleware": "^0.2.0",
     "@now/node": "^1.6.1",
@@ -38,7 +44,9 @@
     "eslint": "^7.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
+    "husky": "^4.2.5",
     "prettier": "^2.0.5",
+    "standard-version": "^8.0.0",
     "typescript": "^3.9.5"
   }
 }
