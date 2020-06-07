@@ -80,6 +80,8 @@ export const transformRequest = (
       )
     }
 
+    res.setHeader('Access-Control-Allow-Origin', '*')
+
     resolve({ req, res })
   })
 }
