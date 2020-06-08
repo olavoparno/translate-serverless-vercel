@@ -67,6 +67,25 @@ export const transformRequest = (
       Logger.error(JSON.stringify(error))
     })
 
+    if (req.method === 'OPTIONS') {
+      reject(
+        new Error(
+          JSON.stringify({
+            status: 200,
+            options: true,
+          }),
+        ),
+      )
+    }
+
+    res.setHeader('Access-Control-Allow-Credentials', 'true')
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+    )
+
     if (req.method !== (method || 'POST')) {
       reject(
         new Error(
@@ -89,6 +108,10 @@ export const handleRejections = (res: NowResponse) => (error: Error): void => {
 
   Logger.info('> HandleRejections::')
   Logger.info(JSON.stringify(parsedError))
+
+  if (parsedError.options) {
+    return res.status(200).end()
+  }
 
   returnHttpJson(res, parsedError.status, parsedError.data)
 }
