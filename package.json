@@ -25,20 +25,15 @@
     }
   },
   "dependencies": {
-    "@amaurymartiny/now-middleware": "^0.2.0",
     "@now/node": "^1.6.1",
     "baidu-translate-api": "^0.4.0",
     "bluebird": "^3.7.2",
-    "cors": "^2.8.5",
     "ioredis": "^4.17.3",
-    "morgan": "^1.10.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.32",
-    "@types/cors": "^2.8.6",
     "@types/ioredis": "^4.16.4",
-    "@types/morgan": "^1.9.0",
     "@typescript-eslint/eslint-plugin": "^3.1.0",
     "@typescript-eslint/parser": "^3.1.0",
     "eslint": "^7.1.0",

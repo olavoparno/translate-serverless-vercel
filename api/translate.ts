@@ -1,8 +1,5 @@
-import { chain } from '@amaurymartiny/now-middleware'
 import { NowRequest, NowResponse } from '@now/node'
 
-import cors from 'cors'
-import morgan from 'morgan'
 import Bluebird from 'bluebird'
 
 import { Logger } from '../services/logging/Logging.logger'
@@ -15,7 +12,7 @@ import {
 import { translateTriage, translateService } from '../services/translator/Translator.service'
 import { redisGet, redisSet } from '../services/redis/Redis.actions'
 
-const handler = (req: NowRequest, res: NowResponse) => {
+const handler = (req: NowRequest, res: NowResponse): void => {
   Bluebird.resolve(transformRequest(req, res))
     .then(returnEndpointPayload)
     .tap((translateData) => {
@@ -51,4 +48,4 @@ const handler = (req: NowRequest, res: NowResponse) => {
     .catch(handleRejections(res))
 }
 
-export default chain(cors(), morgan('common'))(handler)
+export default handler
