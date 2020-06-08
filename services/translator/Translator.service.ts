@@ -14,6 +14,7 @@ export const translateService = ({ message, from, to }: ITranslateOptions): Prom
     .catch((error) => {
       Logger.error('> Translate catch error::')
       Logger.error(JSON.stringify(error))
+      console.log('error', error)
       throw new Error(
         JSON.stringify({
           status: 500,
