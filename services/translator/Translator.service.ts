@@ -3,6 +3,7 @@ import { Logger } from '../logging/Logging.logger'
 import { ITranslateOptions } from '../../interfaces'
 
 export const translateService = ({ message, from, to }: ITranslateOptions): Promise<translate.returnObject> => {
+  console.log('{ message, from, to }', { message, from, to })
   return translate(message, {
     from,
     to,
@@ -11,6 +12,8 @@ export const translateService = ({ message, from, to }: ITranslateOptions): Prom
       return translateResponse
     })
     .catch((error) => {
+      Logger.error('> Translate catch error::')
+      Logger.error(JSON.stringify(error))
       throw new Error(
         JSON.stringify({
           status: 500,
