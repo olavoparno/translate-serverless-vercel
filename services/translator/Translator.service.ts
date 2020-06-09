@@ -1,5 +1,5 @@
 import { returnObject } from 'baidu-translate-api'
-import translate from '../../local-baidu-translate/translate'
+import translate from 'baidu-translate-api'
 import { Logger } from '../logging/Logging.logger'
 import { ITranslateOptions } from '../../interfaces'
 

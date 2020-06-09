@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const querystring = require('querystring')
 
 const request = require('request')
@@ -52,7 +53,9 @@ const translate = {
               .get(url, {
                 headers: {
                   Cookie: cookies.value,
+                  'User-Agent': 'insomnia/7.1.1',
                 },
+                withCredentials: true,
               })
               .then(({ data }) => {
                 const { to, from } = data.trans_result
@@ -66,11 +69,13 @@ const translate = {
                     src,
                   },
                 }
-                Logger.info('RequestFromAxios::')
-                Logger.info(JSON.stringify(newResponse))
+                console.info('ResponseFromAxios::')
+                console.info(JSON.stringify(newResponse))
                 resolve(newResponse)
               })
               .catch((error) => {
+                console.info('CatchFromAxios::')
+                console.info(JSON.stringify(error))
                 reject(error)
               })
           }

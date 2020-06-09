@@ -1,5 +1,5 @@
 import { NowRequest, NowResponse } from '@now/node'
-import translate from '../local-baidu-translate/translate'
+import translate from 'baidu-translate-api'
 
 export default (req: NowRequest, res: NowResponse): void => {
   Promise.resolve(
