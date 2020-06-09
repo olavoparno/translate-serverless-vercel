@@ -3,7 +3,7 @@ import { ITranslateResponse, ITranslateOptions } from '../..'
 
 const redisClient = RedisManager()
 
-export const redisGet = ({ message, from, to }: ITranslateOptions): Promise<string | Error> => {
+export const redisGet = ({ message, from, to }: ITranslateOptions): Promise<string | ITranslateOptions | Error> => {
   return new Promise((resolve, reject) => {
     const normalizedFrom = from === 'auto' ? 'en' : from
     const getKey = JSON.stringify({ cFrom: normalizedFrom, cTo: to, cSrc: message })
@@ -30,12 +30,12 @@ export const redisGet = ({ message, from, to }: ITranslateOptions): Promise<stri
         )
       }
 
-      resolve()
+      resolve({ message, from, to })
     })
   })
 }
 
-export const redisSet = ({ from, to, trans_result }: ITranslateResponse): Promise<string> => {
+export const redisSet = ({ from, to, trans_result }: ITranslateResponse): Promise<ITranslateResponse> => {
   return new Promise((resolve, reject) => {
     const { src, dst } = trans_result
     const setKey = JSON.stringify({
@@ -46,8 +46,8 @@ export const redisSet = ({ from, to, trans_result }: ITranslateResponse): Promis
 
     redisClient
       .set(setKey, dst, 'ex', 2612345)
-      .then((value) => {
-        resolve(value)
+      .then(() => {
+        resolve({ from, to, trans_result })
       })
       .catch((error) => {
         reject(

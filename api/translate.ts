@@ -3,7 +3,6 @@ import { NowRequest, NowResponse } from '@now/node'
 
 import cors from 'cors'
 import morgan from 'morgan'
-import Bluebird from 'bluebird'
 
 import { Logger } from '../services/logging/Logging.logger'
 import {
@@ -16,34 +15,39 @@ import { translateTriage, translateService } from '../services/translator/Transl
 import { redisGet, redisSet } from '../services/redis/Redis.actions'
 
 const handler = (req: NowRequest, res: NowResponse) => {
-  Bluebird.resolve(transformRequest(req, res))
+  Promise.resolve(transformRequest(req, res))
     .then(returnEndpointPayload)
-    .tap((translateData) => {
+    .then((translateData) => {
       Logger.info('> TranslateOptions::')
       Logger.info(JSON.stringify(translateData))
+      return translateData
     })
-    .tap(translateTriage)
-    .tap((translateData) => {
+    .then(translateTriage)
+    .then((translateData) => {
       Logger.info('> ContinuingProcess after triage::')
       Logger.info(JSON.stringify(translateData))
+      return translateData
     })
-    .tap(redisGet)
-    .tap((translateData) => {
+    .then(redisGet)
+    .then((translateData) => {
       Logger.info('> ContinuingProcess after redisGet::')
       Logger.info(JSON.stringify(translateData))
+      return translateData
     })
     .then(translateService)
-    .tap((translateResponse) => {
+    .then((translateResponse) => {
       Logger.info('> ContinuingProcess after translateService::')
       Logger.info(JSON.stringify(translateResponse))
+      return translateResponse
     })
-    .tap(redisSet)
-    .tap((translateResponse) => {
+    .then(redisSet)
+    .then((translateResponse) => {
       Logger.info('> ContinuingProcess after redisSet::')
       Logger.info(JSON.stringify(translateResponse))
+      return translateResponse
     })
-    .tap((translateReponse) => {
-      returnHttpJson(res, 200, {
+    .then((translateReponse) => {
+      return returnHttpJson(res, 200, {
         information: 'Translation successful!',
         translation: translateReponse,
       })
