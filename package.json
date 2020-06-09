@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@now/node": "^1.6.1",
+    "axios": "^0.19.2",
     "baidu-translate-api": "^0.4.0",
     "ioredis": "^4.17.3",
     "logform": "^2.1.2",

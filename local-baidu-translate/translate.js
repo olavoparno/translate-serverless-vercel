@@ -2,6 +2,7 @@
 const querystring = require('querystring')
 
 const request = require('request')
+const axios = require('axios')
 const token = require('./token')
 const cookie = require('./cookie')
 const store = require('./store')
@@ -27,17 +28,10 @@ const translate = {
 
         jar.setCookie(cookies.value, url)
 
-        console.log('URL', url)
-        console.log('JAR', { jar })
-        console.log('COOKIES', cookies)
-
         request(url, { jar }, (err, res, body) => {
           if (err) return reject(err)
 
-          console.log('RES', res)
           console.log('TRANSLATE REQUEST BODY!', body)
-          console.log('TRANSLATE REQUEST BODY length', body.length)
-          console.log('TYPEOF BODY', typeof body)
           try {
             const result = JSON.parse(body || '{"error": "invalid body request"}')
 
@@ -56,7 +50,26 @@ const translate = {
               },
             })
           } catch (err) {
-            console.log('TRANSLATE CATCH ERROR!', err)
+            try {
+              axios
+                .get(url, {
+                  headers: {
+                    Cookie: cookies.value,
+                  },
+                })
+                .then(({ data }) => {
+                  resolve({
+                    from: data.from,
+                    to: data.to,
+                    trans_result: data.trans_result,
+                  })
+                })
+                .catch((error) => {
+                  reject(error)
+                })
+            } catch (error) {
+              reject(error)
+            }
             reject(err)
           }
         })

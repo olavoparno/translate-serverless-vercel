@@ -5,7 +5,7 @@ export default (req: NowRequest, res: NowResponse): void => {
   Promise.resolve(
     translate('Health is ok!', {
       from: 'en',
-      to: 'rom',
+      to: 'pt',
     })
       .then((response) => {
         console.log(response.trans_result.dst)
