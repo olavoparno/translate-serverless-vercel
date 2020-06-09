@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { NowResponse, NowRequest } from '@now/node'
 import { Logger } from '../logging/Logging.logger'
-import { ITranslateOptions } from '../../interfaces'
+import { ITranslateOptions } from '../../index'
 
 export const returnHttpJson = (res: NowResponse, status: number, payload: unknown): NowResponse => {
   return res.status(status).json(payload)
