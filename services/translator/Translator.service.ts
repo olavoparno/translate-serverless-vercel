@@ -1,6 +1,6 @@
 import translate from 'baidu-translate-api'
 import { Logger } from '../logging/Logging.logger'
-import { ITranslateResponse, ITranslateOptions } from '../../index'
+import { ITranslateResponse, ITranslateOptions } from '../..'
 
 export const translateService = ({ message, from, to }: ITranslateOptions): Promise<ITranslateResponse | Error> => {
   return new Promise((resolve, reject) => {

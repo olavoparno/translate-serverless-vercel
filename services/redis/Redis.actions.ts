@@ -1,5 +1,5 @@
 import { RedisManager } from './Redis.instance'
-import { ITranslateResponse, ITranslateOptions } from '../../index'
+import { ITranslateResponse, ITranslateOptions } from '../..'
 
 const redisClient = RedisManager()
 
