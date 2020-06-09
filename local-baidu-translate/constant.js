@@ -1,4 +1,4 @@
-const url = 'http://fanyi.baidu.com'
+const url = 'https://fanyi.baidu.com'
 
 module.exports = {
   FANYI_BAIDU_URL: url,

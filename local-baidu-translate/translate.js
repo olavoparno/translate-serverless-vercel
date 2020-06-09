@@ -34,6 +34,7 @@ const translate = {
         request(url, { jar }, (err, res, body) => {
           if (err) return reject(err)
 
+          console.log('RES', res)
           console.log('TRANSLATE REQUEST BODY!', body)
           console.log('TRANSLATE REQUEST BODY length', body.length)
           console.log('TYPEOF BODY', typeof body)
