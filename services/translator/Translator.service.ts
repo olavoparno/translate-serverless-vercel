@@ -1,6 +1,6 @@
 import translate from 'baidu-translate-api'
 import { Logger } from '../logging/Logging.logger'
-import { ITranslateResponse, ITranslateOptions } from '../..'
+import { ITranslateResponse, ITranslateOptions } from '../../interfaces'
 
 export const translateService = ({ message, from, to }: ITranslateOptions): Promise<ITranslateResponse | Error> => {
   return new Promise((resolve, reject) => {
@@ -28,7 +28,7 @@ export const translateService = ({ message, from, to }: ITranslateOptions): Prom
 export const translateTriage = ({ message, from, to }: ITranslateOptions): Promise<ITranslateOptions | Error> => {
   return new Promise((resolve, reject) => {
     if (from === to) {
-      Logger.info('> NoTranslationMade::')
+      Logger.info('NoTranslationMade::')
       Logger.info(JSON.stringify({ message, from, to }))
 
       reject(

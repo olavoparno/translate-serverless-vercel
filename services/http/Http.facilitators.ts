@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { NowResponse, NowRequest } from '@now/node'
 import { Logger } from '../logging/Logging.logger'
-import { ITranslateOptions } from '../..'
+import { ITranslateOptions } from '../../interfaces'
 
 export const returnHttpJson = (res: NowResponse, status: number, payload: unknown): NowResponse => {
   return res.status(status).json(payload)
@@ -37,7 +37,7 @@ export const returnHtmlPage = ({ res }: { res: NowResponse }): void => {
 
   return fs.readFile(path.join(__dirname, '../../public/index.html'), null, (fsError, data) => {
     if (fsError) {
-      Logger.error('> ReadHTMLFailure::')
+      Logger.error('ReadHTMLFailure::')
       Logger.error(JSON.stringify(fsError))
 
       res.writeHead(404)
@@ -57,13 +57,13 @@ export const transformRequest = (
 ): Promise<{ req: NowRequest; res: NowResponse }> => {
   return new Promise((resolve, reject) => {
     req.on('data', () => {
-      Logger.info('> TransactionOpened::')
+      Logger.info('TransactionOpened::')
     })
     res.on('close', () => {
-      Logger.info('> TransactionClosed')
+      Logger.info('TransactionClosed')
     })
     res.on('error', (error) => {
-      Logger.error('> TransactionError::')
+      Logger.error('TransactionError::')
       Logger.error(JSON.stringify(error))
     })
 
@@ -87,7 +87,7 @@ export const transformRequest = (
 export const handleRejections = (res: NowResponse) => (error: Error): void => {
   const parsedError = JSON.parse(error.toString().replace('Error: ', ''))
 
-  Logger.info('> HandleRejections::')
+  Logger.info('HandleRejections::')
   Logger.info(JSON.stringify(parsedError))
 
   returnHttpJson(res, parsedError.status, parsedError.data)

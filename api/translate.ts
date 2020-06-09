@@ -1,9 +1,4 @@
-import { chain } from '@amaurymartiny/now-middleware'
 import { NowRequest, NowResponse } from '@now/node'
-
-import cors from 'cors'
-import morgan from 'morgan'
-
 import { Logger } from '../services/logging/Logging.logger'
 import {
   returnEndpointPayload,
@@ -14,35 +9,35 @@ import {
 import { translateTriage, translateService } from '../services/translator/Translator.service'
 import { redisGet, redisSet } from '../services/redis/Redis.actions'
 
-const handler = (req: NowRequest, res: NowResponse) => {
+export default (req: NowRequest, res: NowResponse): void => {
   Promise.resolve(transformRequest(req, res))
     .then(returnEndpointPayload)
     .then((translateData) => {
-      Logger.info('> TranslateOptions::')
+      Logger.info('TransformedPayload::')
       Logger.info(JSON.stringify(translateData))
       return translateData
     })
     .then(translateTriage)
     .then((translateData) => {
-      Logger.info('> ContinuingProcess after triage::')
+      Logger.info('ContinuingProcess after triage::')
       Logger.info(JSON.stringify(translateData))
       return translateData
     })
     .then(redisGet)
     .then((translateData) => {
-      Logger.info('> ContinuingProcess after redisGet::')
+      Logger.info('ContinuingProcess after redisGet::')
       Logger.info(JSON.stringify(translateData))
       return translateData
     })
     .then(translateService)
     .then((translateResponse) => {
-      Logger.info('> ContinuingProcess after translateService::')
+      Logger.info('ContinuingProcess after translateService::')
       Logger.info(JSON.stringify(translateResponse))
       return translateResponse
     })
     .then(redisSet)
     .then((translateResponse) => {
-      Logger.info('> ContinuingProcess after redisSet::')
+      Logger.info('ContinuingProcess after redisSet::')
       Logger.info(JSON.stringify(translateResponse))
       return translateResponse
     })
@@ -54,5 +49,3 @@ const handler = (req: NowRequest, res: NowResponse) => {
     })
     .catch(handleRejections(res))
 }
-
-export default chain(cors(), morgan('common'))(handler)
