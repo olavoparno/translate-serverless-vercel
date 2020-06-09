@@ -1,16 +1,17 @@
-import { stringify } from 'querystring'
-import request, { jar as _jar } from 'request'
-import { get } from 'axios'
-import { get as _get } from './token'
-import { get as __get } from './cookie'
-import { getCookies } from './store'
-import { transapi } from './constant'
-import { Logger } from '../services/logging/Logging.logger'
+const querystring = require('querystring')
+
+const request = require('request')
+const axios = require('axios')
+const token = require('./token')
+const cookie = require('./cookie')
+const store = require('./store')
+
+const { transapi } = require('./constant')
 
 const translate = {
   v2: ({ query, from, to }) => {
     return new Promise((resolve, reject) => {
-      _get(query).then(({ sign, token }) => {
+      token.get(query).then(({ sign, token }) => {
         const data = {
           transtype: 'realtime',
           simple_means_flag: 3,
@@ -20,9 +21,9 @@ const translate = {
           sign,
           token,
         }
-        const url = `${transapi.v2}?${stringify(data)}`
-        const jar = _jar()
-        const cookies = getCookies()
+        const url = `${transapi.v2}?${querystring.stringify(data)}`
+        const jar = request.jar()
+        const cookies = store.getCookies()
 
         jar.setCookie(cookies.value, url)
 
@@ -47,11 +48,12 @@ const translate = {
               },
             })
           } catch (err) {
-            get(url, {
-              headers: {
-                Cookie: cookies.value,
-              },
-            })
+            axios
+              .get(url, {
+                headers: {
+                  Cookie: cookies.value,
+                },
+              })
               .then(({ data }) => {
                 const { to, from } = data.trans_result
                 const dataTrans = data.trans_result.data ? data.trans_result.data : null
@@ -97,14 +99,13 @@ const translate = {
   },
 }
 
-import language from './language'
-
+const language = require('./language')
 const { Auto, English } = language
 
-export default (query, opts = {}) => {
+module.exports = (query, opts = {}) => {
   let { from = Auto, to = English } = opts
   let _translate = () => {
-    return __get().then(() => {
+    return cookie.get().then(() => {
       return translate.v2({ query, from, to })
     })
   }
@@ -121,5 +122,4 @@ export default (query, opts = {}) => {
   })
 }
 
-const _language = language
-export { _language as language }
+module.exports.language = language

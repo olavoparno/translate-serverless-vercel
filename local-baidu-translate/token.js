@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /**
  * http://fanyi.bdstatic.com/static/translation/pkg/index_498ea34.js
  *
@@ -86,9 +87,10 @@ function e(r) {
 
 // END
 
-import { jar as _jar, get } from 'request'
-import { getCookies, setParams, getParams } from './store'
-import { FANYI_BAIDU_URL } from './constant'
+const request = require('request')
+const store = require('./store')
+const cookie = require('./cookie')
+const { FANYI_BAIDU_URL } = require('./constant')
 const regExp = {
   gtk: /gtk\s=\s'(.*?)';/g,
   token: /token:\s'(.*?)',/g,
@@ -96,12 +98,12 @@ const regExp = {
 
 function update() {
   return new Promise((resolve, reject) => {
-    const jar = _jar()
-    const cookies = getCookies()
+    const jar = request.jar()
+    const cookies = store.getCookies()
 
     jar.setCookie(cookies.value, FANYI_BAIDU_URL)
 
-    get(FANYI_BAIDU_URL, { jar }, (err, res, body) => {
+    request.get(FANYI_BAIDU_URL, { jar }, (err, res, body) => {
       const gtk = body.match(regExp.gtk)
       let token = body.match(regExp.token)
 
@@ -113,7 +115,7 @@ function update() {
         token = token[0].replace(regExp.token, '$1')
       }
 
-      setParams({
+      store.setParams({
         gtk: window.gtk,
         token,
         expires: getTomorrowZero(),
@@ -133,9 +135,9 @@ function getTomorrowZero() {
   return now.setSeconds(0)
 }
 
-export function get(text) {
+module.exports.get = (text) => {
   return new Promise((resolve, reject) => {
-    let params = getParams()
+    let params = store.getParams()
 
     if (params && params.expires > new Date()) {
       window.gtk = params.gtk
