@@ -56,7 +56,7 @@ export const redisSet = ({ from, to, trans_result }: ITranslateResponse): Promis
               status: 500,
               data: {
                 information: 'Internal redis error.',
-                complementary: JSON.stringify(error),
+                complementary: error,
               },
             }),
           ),

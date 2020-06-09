@@ -16,7 +16,7 @@ export const translateService = ({ message, from, to }: ITranslateOptions): Prom
               status: 500,
               data: {
                 information: 'Internal server error.',
-                complementary: JSON.stringify(error),
+                complementary: error,
               },
             }),
           ),
