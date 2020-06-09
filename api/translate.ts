@@ -1,3 +1,4 @@
+import fs from 'fs'
 import { NowRequest, NowResponse } from '@now/node'
 import { Logger } from '../services/logging/Logging.logger'
 import {
@@ -10,6 +11,9 @@ import { translateTriage, translateService } from '../services/translator/Transl
 import { redisGet, redisSet } from '../services/redis/Redis.actions'
 
 export default (req: NowRequest, res: NowResponse): void => {
+  fs.unlink('tmp/.config/configstore/baidu-translate-api.json', () => {
+    console.log('I HAVE DELETED IT!')
+  })
   Promise.resolve(transformRequest(req, res))
     .then(returnEndpointPayload)
     .then((translateData) => {
