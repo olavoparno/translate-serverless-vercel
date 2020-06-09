@@ -1,4 +1,4 @@
-const languages = {
+export const languages = {
   Arabic: 'ara',
   Auto: 'auto',
   Bulgarian: 'bul',
@@ -29,5 +29,3 @@ const languages = {
   TraditionalChinese: 'cht',
   Vietnamese: 'vie',
 }
-
-module.exports = languages

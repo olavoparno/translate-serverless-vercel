@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const Configstore = require('configstore')
+import Configstore from 'configstore'
 const conf = new Configstore('baidu-translate-api')
 
-const { COOKIES, PARAMS } = require('./constant')
+import { COOKIES, PARAMS } from './constant'
 
 /**
  * {
@@ -17,9 +16,15 @@ const { COOKIES, PARAMS } = require('./constant')
  *   }
  * }
  */
-module.exports = {
-  getCookies: () => conf.get(COOKIES),
-  setCookies: (cookies) => conf.set(COOKIES, cookies),
-  getParams: () => conf.get(PARAMS),
-  setParams: (params) => conf.set(PARAMS, params),
+export function getCookies() {
+  return conf.get(COOKIES)
+}
+export function setCookies(cookies) {
+  return conf.set(COOKIES, cookies)
+}
+export function getParams() {
+  return conf.get(PARAMS)
+}
+export function setParams(params) {
+  return conf.set(PARAMS, params)
 }

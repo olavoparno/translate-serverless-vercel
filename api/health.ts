@@ -8,12 +8,12 @@ export default (req: NowRequest, res: NowResponse): void => {
       to: 'pt',
     })
       .then((response) => {
-        console.log(response.trans_result.dst)
+        console.log('THEN RESOLVE', response)
         res.status(200).json(response)
       })
       .catch((error) => {
-        console.log(error)
-        res.status(200).json(error)
+        console.log('CATCH RESOLVE', error)
+        res.status(500).json(error)
       }),
   )
 }

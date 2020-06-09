@@ -1,18 +1,16 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const querystring = require('querystring')
-
-const request = require('request')
-const axios = require('axios')
-const token = require('./token')
-const cookie = require('./cookie')
-const store = require('./store')
-
-const { transapi } = require('./constant')
+import { stringify } from 'querystring'
+import request, { jar as _jar } from 'request'
+import { get } from 'axios'
+import { get as _get } from './token'
+import { get as __get } from './cookie'
+import { getCookies } from './store'
+import { transapi } from './constant'
+import { Logger } from '../services/logging/Logging.logger'
 
 const translate = {
   v2: ({ query, from, to }) => {
     return new Promise((resolve, reject) => {
-      token.get(query).then(({ sign, token }) => {
+      _get(query).then(({ sign, token }) => {
         const data = {
           transtype: 'realtime',
           simple_means_flag: 3,
@@ -22,9 +20,9 @@ const translate = {
           sign,
           token,
         }
-        const url = `${transapi.v2}?${querystring.stringify(data)}`
-        const jar = request.jar()
-        const cookies = store.getCookies()
+        const url = `${transapi.v2}?${stringify(data)}`
+        const jar = _jar()
+        const cookies = getCookies()
 
         jar.setCookie(cookies.value, url)
 
@@ -32,7 +30,7 @@ const translate = {
           if (err) return reject(err)
 
           try {
-            const result = JSON.parse(body)
+            const result = JSON.parse({})
 
             if (result.error) return reject(result)
 
@@ -49,27 +47,30 @@ const translate = {
               },
             })
           } catch (err) {
-            try {
-              axios
-                .get(url, {
-                  headers: {
-                    Cookie: cookies.value,
+            get(url, {
+              headers: {
+                Cookie: cookies.value,
+              },
+            })
+              .then(({ data }) => {
+                const { to, from } = data.trans_result
+                const dataTrans = data.trans_result.data ? data.trans_result.data : null
+                const { src, dst } = dataTrans ? dataTrans[0] : { src: 'error', dst: 'error' }
+                const newResponse = {
+                  from,
+                  to,
+                  trans_result: {
+                    dst,
+                    src,
                   },
-                })
-                .then(({ data }) => {
-                  resolve({
-                    from: data.from,
-                    to: data.to,
-                    trans_result: data.trans_result,
-                  })
-                })
-                .catch((error) => {
-                  reject(error)
-                })
-            } catch (error) {
-              reject(error)
-            }
-            reject(err)
+                }
+                Logger.info('RequestFromAxios::')
+                Logger.info(JSON.stringify(newResponse))
+                resolve(newResponse)
+              })
+              .catch((error) => {
+                reject(error)
+              })
           }
         })
       })
@@ -82,7 +83,6 @@ const translate = {
       request(url, (err, res, body) => {
         if (err) return reject(err)
 
-        console.log('LANGDETECT REQUEST BODY!', body)
         try {
           let result = JSON.parse(body)
 
@@ -97,13 +97,14 @@ const translate = {
   },
 }
 
-const language = require('./language')
+import language from './language'
+
 const { Auto, English } = language
 
-module.exports = (query, opts = {}) => {
+export default (query, opts = {}) => {
   let { from = Auto, to = English } = opts
   let _translate = () => {
-    return cookie.get().then(() => {
+    return __get().then(() => {
       return translate.v2({ query, from, to })
     })
   }
@@ -120,4 +121,5 @@ module.exports = (query, opts = {}) => {
   })
 }
 
-module.exports.language = language
+const _language = language
+export { _language as language }
