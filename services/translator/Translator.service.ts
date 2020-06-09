@@ -1,26 +1,28 @@
 import translate from 'baidu-translate-api'
 import { Logger } from '../logging/Logging.logger'
-import { ITranslateOptions } from '../../interfaces'
+import { ITranslateResponse, ITranslateOptions } from '../../interfaces'
 
-export const translateService = ({ message, from, to }: ITranslateOptions): Promise<translate.returnObject> => {
-  return translate(message, {
-    from,
-    to,
+export const translateService = ({ message, from, to }: ITranslateOptions): Promise<ITranslateResponse | Error> => {
+  return new Promise((resolve, reject) => {
+    return translate(message, {
+      from,
+      to,
+    })
+      .then(resolve)
+      .catch((error) => {
+        reject(
+          new Error(
+            JSON.stringify({
+              status: 500,
+              data: {
+                information: 'Internal server error.',
+                complementary: JSON.stringify(error),
+              },
+            }),
+          ),
+        )
+      })
   })
-    .then((translateResponse) => {
-      return translateResponse
-    })
-    .catch((error) => {
-      throw new Error(
-        JSON.stringify({
-          status: 500,
-          data: {
-            information: 'Internal server error.',
-            complementary: JSON.stringify(error),
-          },
-        }),
-      )
-    })
 }
 
 export const translateTriage = ({ message, from, to }: ITranslateOptions): Promise<ITranslateOptions | Error> => {
