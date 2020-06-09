@@ -1,8 +1,9 @@
-import translate from 'baidu-translate-api'
+import { returnObject } from 'baidu-translate-api'
+import translate from '../../local-baidu-translate/translate'
 import { Logger } from '../logging/Logging.logger'
 import { ITranslateOptions } from '../../interfaces'
 
-export const translateService = ({ message, from, to }: ITranslateOptions): Promise<void | translate.returnObject> => {
+export const translateService = ({ message, from, to }: ITranslateOptions): Promise<void | returnObject> => {
   return translate(message, {
     from,
     to,
