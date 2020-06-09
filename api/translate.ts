@@ -1,5 +1,7 @@
 import { NowRequest, NowResponse } from '@now/node'
+
 import Bluebird from 'bluebird'
+
 import { Logger } from '../services/logging/Logging.logger'
 import {
   returnEndpointPayload,
