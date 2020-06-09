@@ -31,9 +31,8 @@ const translate = {
         request(url, { jar }, (err, res, body) => {
           if (err) return reject(err)
 
-          console.log('TRANSLATE REQUEST BODY!', body)
           try {
-            const result = JSON.parse(body || '{"error": "invalid body request"}')
+            const result = JSON.parse(body)
 
             if (result.error) return reject(result)
 
