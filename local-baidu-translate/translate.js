@@ -30,8 +30,9 @@ const translate = {
         request(url, { jar }, (err, res, body) => {
           if (err) return reject(err)
 
+          console.log('TRANSLATE REQUEST BODY!', body)
+          console.log('TYPEOF BODY', typeof body)
           try {
-            console.log('TRANSLATE REQUEST BODY!', body)
             const result = JSON.parse(body)
 
             if (result.error) return reject(result)
@@ -49,6 +50,7 @@ const translate = {
               },
             })
           } catch (err) {
+            console.log('TRANSLATE CATCH ERROR!', err)
             reject(err)
           }
         })
@@ -62,8 +64,8 @@ const translate = {
       request(url, (err, res, body) => {
         if (err) return reject(err)
 
+        console.log('LANGDETECT REQUEST BODY!', body)
         try {
-          console.log('LANGDETECT REQUEST BODY!', body)
           let result = JSON.parse(body)
 
           if (result.error) return reject(result)
