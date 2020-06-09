@@ -27,13 +27,18 @@ const translate = {
 
         jar.setCookie(cookies.value, url)
 
+        console.log('URL', url)
+        console.log('JAR', { jar })
+        console.log('COOKIES', cookies)
+
         request(url, { jar }, (err, res, body) => {
           if (err) return reject(err)
 
           console.log('TRANSLATE REQUEST BODY!', body)
+          console.log('TRANSLATE REQUEST BODY length', body.length)
           console.log('TYPEOF BODY', typeof body)
           try {
-            const result = JSON.parse(body)
+            const result = JSON.parse(body || '{"error": "invalid body request"}')
 
             if (result.error) return reject(result)
 
