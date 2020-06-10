@@ -14,7 +14,7 @@ export const translateService = ({ message, from, to }: ITranslateOptions): Prom
         JSON.stringify({
           status: 500,
           data: {
-            information: 'Internal server error.',
+            information: 'The lib baidu-translate-api has errored.',
             complementary: error,
           },
         }),

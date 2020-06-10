@@ -13,32 +13,29 @@ export default (req: NowRequest, res: NowResponse): void => {
   Promise.resolve(transformRequest(req, res))
     .then(returnEndpointPayload)
     .then((translateData) => {
-      Logger.info('TransformedPayload::')
+      Logger.info('Payload normalized::')
       Logger.info(JSON.stringify(translateData))
       return translateData
     })
     .then(translateTriage)
     .then((translateData) => {
-      Logger.info('ContinuingProcess after triage::')
-      Logger.info(JSON.stringify(translateData))
+      Logger.info('Triage done. Continuing::')
       return translateData
     })
     .then(redisGet)
     .then((translateData) => {
-      Logger.info('ContinuingProcess after redisGet::')
-      Logger.info(JSON.stringify(translateData))
+      Logger.info('No Cache found. Continuing::')
       return translateData
     })
     .then(translateService)
     .then((translateResponse) => {
-      Logger.info('ContinuingProcess after translateService::')
+      Logger.info('Translate service completed::')
       Logger.info(JSON.stringify(translateResponse))
       return translateResponse
     })
     .then(redisSet)
     .then((translateResponse) => {
-      Logger.info('ContinuingProcess after redisSet::')
-      Logger.info(JSON.stringify(translateResponse))
+      Logger.info('Cache set successfully::')
       return translateResponse
     })
     .then((translateReponse) => {
