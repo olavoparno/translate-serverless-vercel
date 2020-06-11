@@ -3,17 +3,17 @@
   "version": "1.0.1",
   "description": "Translate API Vercel Serverless Functions",
   "scripts": {
+    "dev": "BROWSER=none react-scripts start",
+    "build": "react-scripts build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --color",
-    "prettier": "prettier --write 'api/**/*.ts'",
+    "prettier": "prettier --write 'api/**/*.{ts, tsx}'",
     "release": "standard-version"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/olavoparno/translate-serverless-now.git"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/olavoparno/translate-serverless-now/issues"
@@ -21,10 +21,19 @@
   "homepage": "https://github.com/olavoparno/translate-serverless-now#readme",
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "echo 'pre-commit'"
     }
   },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
   "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1",
     "@now/node": "^1.6.1",
     "@vitalets/google-translate-api": "^3.0.0",
     "axios": "^0.19.2",
@@ -34,9 +43,11 @@
   },
   "devDependencies": {
     "@types/ioredis": "^4.16.4",
+    "@types/react": "^16.9.36",
+    "@types/react-dom": "^16.9.8",
     "@typescript-eslint/eslint-plugin": "^3.2.0",
     "@typescript-eslint/parser": "^3.2.0",
-    "eslint": "^7.2.0",
+    "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
     "husky": "^4.2.5",

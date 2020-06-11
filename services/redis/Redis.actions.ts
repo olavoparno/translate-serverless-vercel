@@ -8,6 +8,7 @@ export const redisGet = ({ message, from, to }: ITranslateOptions): Promise<stri
     const normalizedFrom = from === 'auto' ? 'en' : from
     const getKey = JSON.stringify({ cFrom: normalizedFrom, cTo: to, cSrc: message })
 
+    console.log('getKey', getKey)
     redisClient.get(getKey).then((value) => {
       if (value) {
         reject(
