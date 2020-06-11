@@ -3,7 +3,7 @@ import { ITranslateResponse, ITranslateOptions } from '../../interfaces'
 
 const redisClient = RedisManager()
 
-export const redisGet = ({ message, from, to }: ITranslateOptions): Promise<string | ITranslateOptions | Error> => {
+export const redisGet = ({ message, from, to }: ITranslateOptions): Promise<ITranslateOptions> => {
   return new Promise((resolve, reject) => {
     const normalizedFrom = from === 'auto' ? 'en' : from
     const getKey = JSON.stringify({ cFrom: normalizedFrom, cTo: to, cSrc: message })

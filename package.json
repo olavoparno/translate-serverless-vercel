@@ -2,7 +2,6 @@
   "name": "translate-serverless-now",
   "version": "1.0.1",
   "description": "Translate API Vercel Serverless Functions",
-  "private": true,
   "scripts": {
     "dev": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
@@ -24,8 +23,8 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1",
     "react-scripts": "3.4.1",
     "@now/node": "^1.6.1",
     "@vitalets/google-translate-api": "^3.0.0",

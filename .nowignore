@@ -1,10 +1,9 @@
 README.md
+CHANGELOG.md
 LICENSE
+package-lock.json
 .prettierrc.js
 .eslintrc.js
 .vscode
-package-lock.json
-_config.yml
-CHANGELOG.md
-interfaces.ts
 .gitignore
+_config.yml

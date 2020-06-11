@@ -1,33 +1,26 @@
-export = googleTranslateApi
-
-declare function googleTranslateApi(
-  query: string,
-  opts?: googleTranslateApi.IOptions,
-): Promise<googleTranslateApi.ITranslateResponse>
-
-declare namespace googleTranslateApi {
-  export interface IOptions {
+declare module '@vitalets/google-translate-api' {
+  export interface IHTTPOptions {
     from?: string
     to?: string
   }
 
-  export interface ITranslateLanguage {
+  export interface ITranslateHTTPLanguage {
     didYouMean: boolean
     iso: string
   }
 
-  export interface ITranslateText {
+  export interface ITranslateHTTPText {
     autoCorrected: boolean
     value: string
     didYouMean: boolean
   }
 
-  export interface ITranslateResponse {
+  export interface ITranslateHTTPResponse {
     text: string
     pronunciation: string
     from: {
-      language: ITranslateLanguage
-      text: ITranslateText
+      language: ITranslateHTTPLanguage
+      text: ITranslateHTTPText
     }
     raw: string
   }
@@ -140,4 +133,6 @@ declare namespace googleTranslateApi {
     yo = 'Yoruba',
     zu = 'Zulu',
   }
+
+  export default function translate(query: string, opts?: IHTTPOptions): Promise<ITranslateHTTPResponse>
 }
