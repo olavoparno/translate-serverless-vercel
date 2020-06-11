@@ -1,20 +1,28 @@
-import { returnObject } from 'baidu-translate-api'
-import translate from 'baidu-translate-api'
+import translate from '@vitalets/google-translate-api'
 import { Logger } from '../logging/Logging.logger'
-import { ITranslateOptions } from '../../interfaces'
+import { ITranslateOptions, ITranslateResponse } from '../../interfaces'
 
-export const translateService = ({ message, from, to }: ITranslateOptions): Promise<void | returnObject> => {
+export const translateService = ({ message, from, to }: ITranslateOptions): Promise<void | ITranslateResponse> => {
   return translate(message, {
     from,
     to,
   })
-    .then((res) => res)
+    .then((res) => {
+      return {
+        from: res.from.language.iso || from,
+        to,
+        trans_result: {
+          dst: res.text,
+          src: message,
+        },
+      }
+    })
     .catch((error) => {
       throw new Error(
         JSON.stringify({
           status: 500,
           data: {
-            information: 'The lib baidu-translate-api has errored.',
+            information: 'The translation lib has errored.',
             complementary: error,
           },
         }),

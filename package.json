@@ -26,8 +26,8 @@
   },
   "dependencies": {
     "@now/node": "^1.6.1",
+    "@vitalets/google-translate-api": "^3.0.0",
     "axios": "^0.19.2",
-    "baidu-translate-api": "^0.4.0",
     "ioredis": "^4.17.3",
     "logform": "^2.1.2",
     "winston": "^3.2.1"

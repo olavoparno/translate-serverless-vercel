@@ -1,5 +1,5 @@
 import { NowRequest, NowResponse } from '@now/node'
-import translate from 'baidu-translate-api'
+import translate from '@vitalets/google-translate-api'
 
 export default (req: NowRequest, res: NowResponse): void => {
   Promise.resolve(
@@ -8,11 +8,9 @@ export default (req: NowRequest, res: NowResponse): void => {
       to: 'pt',
     })
       .then((response) => {
-        console.log('THEN RESOLVE', response)
         res.status(200).json(response)
       })
       .catch((error) => {
-        console.log('CATCH RESOLVE', error)
         res.status(500).json(error)
       }),
   )
