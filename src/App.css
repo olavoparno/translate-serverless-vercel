@@ -2,8 +2,7 @@ main {
   align-content: center;
   box-sizing: border-box;
   display: grid;
-  font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
-    'Arial', sans-serif;
+  font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   hyphens: auto;
   line-height: 1.65;
   margin: 0 auto;
@@ -34,8 +33,8 @@ a:hover {
 code,
 pre {
   color: #d400ff;
-  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-    Bitstream Vera Sans Mono, Courier New, monospace, serif;
+  font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New,
+    monospace, serif;
   font-size: 0.92em;
 }
 code:before,

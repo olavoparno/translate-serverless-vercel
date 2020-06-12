@@ -1,9 +1,8 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import './App.css'
 
-const healthDict = {
+const healthDict: Record<number, any> = {
   200: {
     text: 'running',
   },
@@ -15,23 +14,22 @@ const healthDict = {
   },
 }
 
-function App() {
-  const [healthStatus, setHealthStatus] = useState(0)
+function App(): JSX.Element {
+  const [healthResponse, setHealthResponse] = useState<any>(null)
   useEffect(() => {
     async function getHealthStatus() {
-      const res = await axios.post('/api/translate', {
-        message: 'Translate me now!',
-        from: 'en',
-        to: 'pt',
-      })
-      setHealthStatus(+res.status)
+      const res = await axios.post('/api/translate', { message: 'Translate me now!', from: 'en', to: 'pt' })
+      setHealthResponse(res)
     }
     getHealthStatus()
   }, [])
   return (
     <main>
-      <h2>The project is currently{healthDict[healthStatus] ? healthDict[healthStatus].text : healthDict[0].text}</h2>
-      {healthStatus === 500 ? (
+      <h2>
+        The project is currently{' '}
+        {healthDict[healthResponse?.status] ? healthDict[healthResponse.status].text : healthDict[0].text}
+      </h2>
+      {healthResponse?.status === 500 ? (
         <>
           <h1>Please watch the cat carefully</h1>
           <img src="https://http.cat/418" alt="Cat in a Teapot!" />
