@@ -22,14 +22,15 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "react": "^16.6.1",
-    "react-dom": "^16.6.1",
-    "react-scripts": "3.4.1",
     "@now/node": "^1.6.1",
+    "@material-ui/core": "^4.9.14",
     "@vitalets/google-translate-api": "^3.0.0",
     "axios": "^0.19.2",
     "ioredis": "^4.17.3",
     "logform": "^2.1.2",
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1",
+    "react-scripts": "3.4.1",
     "winston": "^3.2.1"
   },
   "devDependencies": {
