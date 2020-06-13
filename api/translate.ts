@@ -1,5 +1,7 @@
+import { chain } from '@amaurymartiny/now-middleware'
 import { NowRequest, NowResponse } from '@now/node'
 import { Logger } from '../services/logging/Logging.logger'
+import cors from 'cors'
 import {
   returnEndpointPayload,
   transformRequest,
@@ -9,7 +11,7 @@ import {
 import { translateTriage, translateService } from '../services/translator/Translator.service'
 import { redisGet, redisSet } from '../services/redis/Redis.actions'
 
-export default (req: NowRequest, res: NowResponse): void => {
+const handler = (req: NowRequest, res: NowResponse): void => {
   Promise.resolve(transformRequest(req, res))
     .then(returnEndpointPayload)
     .then((translateData) => {
@@ -46,3 +48,5 @@ export default (req: NowRequest, res: NowResponse): void => {
     })
     .catch(handleRejections(res))
 }
+
+export default chain(cors())(handler)

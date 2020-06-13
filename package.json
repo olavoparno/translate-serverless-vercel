@@ -22,10 +22,13 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "@now/node": "^1.6.1",
+    "@amaurymartiny/now-middleware": "^0.2.0",
     "@material-ui/core": "^4.9.14",
+    "@material-ui/icons": "^4.9.1",
+    "@now/node": "^1.6.1",
     "@vitalets/google-translate-api": "^3.0.0",
     "axios": "^0.19.2",
+    "cors": "^2.8.5",
     "ioredis": "^4.17.3",
     "logform": "^2.1.2",
     "react": "^16.6.1",
@@ -34,6 +37,7 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.6",
     "@types/ioredis": "^4.16.4",
     "@types/react": "^16.9.36",
     "@types/react-dom": "^16.9.8",
