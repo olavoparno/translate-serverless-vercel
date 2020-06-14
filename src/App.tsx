@@ -18,8 +18,11 @@ import { LoadingComponent } from './common/loading/Loading.Loading.component'
 
 const useStyles = makeStyles({
   root: {
-    margin: '2rem 1rem',
-    maxWidth: '35%',
+    margin: '2rem 0',
+    maxWidth: '100%',
+  },
+  container: {
+    padding: 0,
   },
   media: {
     height: '100%',
@@ -58,7 +61,7 @@ function App(): JSX.Element {
   const classes = useStyles()
 
   return (
-    <Container maxWidth="xl">
+    <Container className={classes.container}>
       <Grid container justify="center" alignItems="center" direction="column">
         {healthResponse === null && <LoadingComponent />}
         <Fade in={healthResponse !== null} timeout={500}>
