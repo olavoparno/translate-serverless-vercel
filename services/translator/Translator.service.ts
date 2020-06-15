@@ -9,7 +9,7 @@ export const translateService = ({ message, from, to }: ITranslateOptions): Prom
   })
     .then((res) => {
       return {
-        from: res.from.language.iso || from,
+        from,
         to,
         trans_result: {
           dst: res.text,
