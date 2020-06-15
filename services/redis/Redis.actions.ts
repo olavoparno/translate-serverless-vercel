@@ -5,8 +5,7 @@ const redisClient = RedisManager()
 
 export const redisGet = ({ message, from, to }: ITranslateOptions): Promise<ITranslateOptions> => {
   return new Promise((resolve, reject) => {
-    const normalizedFrom = from === 'auto' ? 'en' : from
-    const getKey = JSON.stringify({ cFrom: normalizedFrom, cTo: to, cSrc: message })
+    const getKey = JSON.stringify({ cFrom: from, cTo: to, cSrc: message })
 
     redisClient.get(getKey).then((value) => {
       if (value) {
@@ -17,7 +16,7 @@ export const redisGet = ({ message, from, to }: ITranslateOptions): Promise<ITra
               data: {
                 information: 'From cache.',
                 translation: {
-                  from: normalizedFrom,
+                  from: from,
                   to,
                   trans_result: {
                     dst: value,
