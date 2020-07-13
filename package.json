@@ -30,7 +30,7 @@
     "axios": "^0.19.2",
     "cors": "^2.8.5",
     "ioredis": "^4.17.3",
-    "logform": "^2.1.2",
+    "logform": "^2.2.0",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
     "react-scripts": "3.4.1",
