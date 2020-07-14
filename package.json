@@ -34,7 +34,7 @@
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
     "react-scripts": "3.4.1",
-    "winston": "^3.2.1"
+    "winston": "^3.3.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",
