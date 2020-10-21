@@ -33,7 +33,7 @@
     "logform": "^2.1.2",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
-    "react-scripts": "3.4.1",
+    "react-scripts": "3.4.4",
     "winston": "^3.2.1"
   },
   "devDependencies": {
