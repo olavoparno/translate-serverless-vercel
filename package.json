@@ -27,7 +27,7 @@
     "@material-ui/icons": "^4.9.1",
     "@now/node": "^1.6.1",
     "@vitalets/google-translate-api": "^3.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "cors": "^2.8.5",
     "ioredis": "^4.17.3",
     "logform": "^2.1.2",
