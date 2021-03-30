@@ -26,7 +26,7 @@
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@now/node": "^1.8.5",
-    "@vitalets/google-translate-api": "^5.0.0",
+    "@vitalets/google-translate-api": "^5.1.0",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
     "ioredis": "^4.23.0",
