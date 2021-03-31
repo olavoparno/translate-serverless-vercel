@@ -1,6 +1,6 @@
 {
   "name": "translate-serverless-now",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Translate API Vercel Serverless Functions",
   "scripts": {
     "dev": "BROWSER=none react-scripts start",

@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/olavoparno/translate-serverless-now/compare/v1.0.1...v1.0.2) (2021-03-31)
+
+
+### Bug Fixes
+
+* upgrade @vitalets/google-translate-api from 5.0.0 to 5.1.0 ([3eee8de](https://github.com/olavoparno/translate-serverless-now/commit/3eee8de9d8079f216d45bbce65d1b4807e22bdb3))
+* upgrade ioredis from 4.22.0 to 4.23.0 ([a0fc829](https://github.com/olavoparno/translate-serverless-now/commit/a0fc829fbcf2d1a582c72ebfb7ec49839973161d))
+* **redis:** remove auto === en from redis get ([8c5fad4](https://github.com/olavoparno/translate-serverless-now/commit/8c5fad47e37ab5791f0ee1c6aed47601cbf270ec))
+* **service:** remove auto language retrieval ([6a11470](https://github.com/olavoparno/translate-serverless-now/commit/6a1147098b5377fd2a848ac9132d56212374dfe2))
+
 ### [1.0.1](https://github.com/olavoparno/translate-serverless-now/compare/v1.0.0...v1.0.1) (2020-06-11)
 
 ## 1.0.0 (2020-06-07)
