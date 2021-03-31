@@ -22,32 +22,32 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "@amaurymartiny/now-middleware": "^0.2.1",
+    "@amaurym/now-middleware": "^0.2.2",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@now/node": "^1.8.5",
     "@vitalets/google-translate-api": "^5.1.0",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
-    "ioredis": "^4.23.0",
+    "ioredis": "^4.24.6",
     "logform": "^2.2.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-scripts": "4.0.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
     "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
-    "@types/ioredis": "^4.19.4",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.1",
-    "@typescript-eslint/eslint-plugin": "^4.15.1",
-    "@typescript-eslint/parser": "^4.15.1",
-    "eslint": "^7.20.0",
-    "eslint-config-prettier": "^7.2.0",
+    "@types/ioredis": "^4.22.2",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/parser": "^4.20.0",
+    "eslint": "^7.23.0",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "prettier": "^2.2.1",
-    "standard-version": "^9.1.0",
-    "typescript": "^4.1.5"
+    "standard-version": "^9.1.1",
+    "typescript": "^4.2.3"
   }
 }

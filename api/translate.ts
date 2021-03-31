@@ -1,4 +1,4 @@
-import { chain } from '@amaurymartiny/now-middleware'
+import { chain } from '@amaurym/now-middleware'
 import { NowRequest, NowResponse } from '@now/node'
 import { Logger } from '../services/logging/Logging.logger'
 import cors from 'cors'
