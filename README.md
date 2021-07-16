@@ -44,7 +44,7 @@ interface ITranslateResponse {
 - Examples:
 
 ```js
-fetch('https://translate-serverless.vercel.sh/api/translate', {
+fetch('https://translate-serverless.vercel.app/api/translate', {
   method: 'POST',
   headers: {
     'content-type': 'application/json',
@@ -66,7 +66,7 @@ fetch('https://translate-serverless.vercel.sh/api/translate', {
 
 ```sh
 curl --request POST \
-  --url https://translate-serverless.vercel.sh/api/translate \
+  --url https://translate-serverless.vercel.app/api/translate \
   --header 'content-type: application/json' \
   --data '{
 	"message": "Translate me now!",

@@ -14,6 +14,10 @@
     "type": "git",
     "url": "git+https://github.com/olavoparno/translate-serverless-vercel.git"
   },
+  "author": {
+    "name": "Olavo Parno",
+    "url": "https://olavoparno.vercel.app/"
+  },
   "license": "ISC",
   "browserslist": [
     ">0.2%",
