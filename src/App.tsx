@@ -78,10 +78,10 @@ function App(): JSX.Element {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
-                  Translate Serverless Now
+                  Translate Serverless Vercel
                 </Typography>
                 <Typography gutterBottom variant="body2" component="p">
-                  Serverless Translation API using Vercel's new API
+                  Serverless Translation API using Vercel's API
                 </Typography>
                 <Typography variant="body2" component="p" color="textSecondary">
                   The project is currently:{' '}
@@ -96,7 +96,7 @@ function App(): JSX.Element {
               <CardActions>
                 <Tooltip title="Readme!" placement="top-end">
                   <IconButton
-                    href="https://github.com/olavoparno/translate-serverless-now/blob/master/README.md"
+                    href="https://github.com/olavoparno/translate-serverless-vercel/blob/master/README.md"
                     aria-label="readme"
                   >
                     <GitHubIcon />

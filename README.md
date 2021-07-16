@@ -1,4 +1,4 @@
-# Translate Serverless Now
+# Translate Serverless Vercel
 
 > Translate API Vercel Serverless Functions
 
@@ -9,7 +9,7 @@
 
 ### Deploy it yourself
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/olavoparno/translate-serverless-now)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/olavoparno/translate-serverless-vercel)
 
 - Keep in mind that by using the lib `@vitalets/google-translate-api` you would have to setup a environment variable called `XDG_CONFIG_HOME` to `/tmp/.config/` in order to store its cookies.
 
@@ -44,7 +44,7 @@ interface ITranslateResponse {
 - Examples:
 
 ```js
-fetch('https://translate-serverless.now.sh/api/translate', {
+fetch('https://translate-serverless.vercel.sh/api/translate', {
   method: 'POST',
   headers: {
     'content-type': 'application/json',
@@ -66,7 +66,7 @@ fetch('https://translate-serverless.now.sh/api/translate', {
 
 ```sh
 curl --request POST \
-  --url https://translate-serverless.now.sh/api/translate \
+  --url https://translate-serverless.vercel.sh/api/translate \
   --header 'content-type: application/json' \
   --data '{
 	"message": "Translate me now!",

@@ -5,7 +5,7 @@ const { colors, customFormat } = config
 
 export const Logger = createLogger({
   defaultMeta: {
-    projectLabel: 'Translate Serverless Now',
+    projectLabel: 'Translate Serverless Vercel',
   },
   exitOnError: false,
   transports: [

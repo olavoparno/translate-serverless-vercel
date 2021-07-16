@@ -1,5 +1,5 @@
 import { chain } from '@amaurym/now-middleware'
-import { NowRequest, NowResponse } from '@now/node'
+import { VercelRequest, VercelResponse } from '@vercel/node'
 import { Logger } from '../services/logging/Logging.logger'
 import cors from 'cors'
 import {
@@ -11,7 +11,7 @@ import {
 import { translateTriage, translateService } from '../services/translator/Translator.service'
 import { redisGet, redisSet } from '../services/redis/Redis.actions'
 
-const handler = (req: NowRequest, res: NowResponse): void => {
+const handler = (req: VercelRequest, res: VercelResponse): void => {
   Promise.resolve(transformRequest(req, res))
     .then(returnEndpointPayload)
     .then((translateData) => {
