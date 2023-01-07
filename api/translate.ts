@@ -1,18 +1,17 @@
-import { chain } from '@amaurym/now-middleware'
 import { VercelRequest, VercelResponse } from '@vercel/node'
 import { Logger } from '../services/logging/Logging.logger'
-import cors from 'cors'
 import {
   returnEndpointPayload,
   transformRequest,
   returnHttpJson,
   handleRejections,
+  allowCors,
 } from '../services/http/Http.facilitators'
 import { translateTriage, translateService } from '../services/translator/Translator.service'
 import { redisGet, redisSet } from '../services/redis/Redis.actions'
 
-const handler = (req: VercelRequest, res: VercelResponse): void => {
-  Promise.resolve(transformRequest(req, res))
+const handler = async (req: VercelRequest, res: VercelResponse) => {
+  return Promise.resolve(transformRequest(req, res))
     .then(returnEndpointPayload)
     .then((translateData) => {
       Logger.info('Payload normalized::')
@@ -49,4 +48,4 @@ const handler = (req: VercelRequest, res: VercelResponse): void => {
     .catch(handleRejections(res))
 }
 
-export default chain(cors())(handler)
+export default allowCors(handler)
