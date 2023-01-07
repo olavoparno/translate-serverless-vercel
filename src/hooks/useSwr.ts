@@ -13,7 +13,7 @@ export function useSwrFactory<T>(key: string, fetcher: Fetcher<T>) {
   return response
 }
 
-export function useSwr<T>(key: string, data?: any) {
+export function useSwr<T>(key: string, data?: unknown) {
   const fetcher = (url: string) =>
     baseRequest
       .post(`${url}`, data)

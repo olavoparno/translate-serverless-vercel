@@ -42,7 +42,7 @@ const healthDict = {
 }
 
 export function AppTemplate(): JSX.Element {
-  const { data, error, isLoading } = useSwr<{ information: string; translation: TranslateResponse }>('/api/translate', {
+  const { data, isLoading } = useSwr<{ information: string; translation: TranslateResponse }>('/api/translate', {
     message: 'Translate me now!',
     from: 'en',
     to: 'pt',
