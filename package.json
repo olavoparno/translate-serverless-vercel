@@ -3,8 +3,9 @@
   "version": "1.0.2",
   "description": "Translate API Vercel Serverless Functions",
   "scripts": {
-    "start": "BROWSER=none react-scripts start",
-    "build": "react-scripts build",
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --color --ext js,jsx,ts,tsx",
     "prettier": "prettier --write './**/*.{ts, js, jsx}'",
@@ -28,18 +29,18 @@
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
-    "@vercel/node": "^2.8.4",
     "@vitalets/google-translate-api": "^9.0.0",
     "axios": "^1.2.2",
     "ioredis": "^5.2.4",
     "logform": "^2.4.2",
+    "next": "^13.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "the-bugging": "^1.0.17",
     "winston": "^3.8.2"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.13",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.10",
     "@typescript-eslint/eslint-plugin": "^5.48.0",

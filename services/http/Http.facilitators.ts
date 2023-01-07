@@ -1,14 +1,14 @@
 import fs from 'fs'
 import path from 'path'
-import { VercelRequest, VercelResponse } from '@vercel/node'
+import { NextApiRequest, NextApiResponse } from 'next'
 import { Logger } from '../logging/Logging.logger'
 import { TranslateOptions } from '../../interfaces'
 
-export const returnHttpJson = (res: VercelResponse, status: number, payload: unknown): VercelResponse => {
+export const returnHttpJson = (res: NextApiResponse, status: number, payload: unknown): NextApiResponse => {
   return res.status(status).json(payload)
 }
 
-export const returnEndpointPayload = async ({ req }: { req: VercelRequest }): Promise<TranslateOptions> => {
+export const returnEndpointPayload = async ({ req }: { req: NextApiRequest }): Promise<TranslateOptions> => {
   return new Promise((resolve, reject) => {
     if (Object.keys(req.body || {}).length > 0) {
       resolve(req.body as TranslateOptions)
@@ -32,7 +32,7 @@ export const returnEndpointPayload = async ({ req }: { req: VercelRequest }): Pr
   })
 }
 
-export const returnHtmlPage = ({ res }: { res: VercelResponse }): void => {
+export const returnHtmlPage = ({ res }: { res: NextApiResponse }): void => {
   res.writeHead(418, { 'Content-Type': 'text/html', 'Cache-Control': 'max-age=0, s-maxage=2612345' })
 
   return fs.readFile(path.join(__dirname, '../../public/index.html'), null, (fsError, data) => {
@@ -51,10 +51,10 @@ export const returnHtmlPage = ({ res }: { res: VercelResponse }): void => {
 }
 
 export const transformRequest = async (
-  req: VercelRequest,
-  res: VercelResponse,
+  req: NextApiRequest,
+  res: NextApiResponse,
   method?: string,
-): Promise<{ req: VercelRequest; res: VercelResponse }> => {
+): Promise<{ req: NextApiRequest; res: NextApiResponse }> => {
   return new Promise((resolve, reject) => {
     req.on('data', () => {
       Logger.info('TransactionOpened::')
@@ -85,7 +85,7 @@ export const transformRequest = async (
 }
 
 export const handleRejections =
-  (res: VercelResponse) =>
+  (res: NextApiResponse) =>
   (error: Error): void => {
     const parsedError = JSON.parse(error.toString().replace('Error: ', ''))
 
@@ -96,8 +96,8 @@ export const handleRejections =
   }
 
 export const allowCors =
-  (fn: (req: VercelRequest, res: VercelResponse) => Promise<void | VercelResponse>) =>
-  async (req: VercelRequest, res: VercelResponse) => {
+  (fn: (req: NextApiRequest, res: NextApiResponse) => Promise<void | NextApiResponse>) =>
+  async (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader('Access-Control-Allow-Credentials', 'true')
     res.setHeader('Access-Control-Allow-Origin', '*')
 
