@@ -15,7 +15,7 @@ import {
 import GitHubIcon from '@material-ui/icons/GitHub'
 import axios, { AxiosResponse } from 'axios'
 import { LoadingComponent } from './common/loading/Loading.Loading.component'
-import { ITranslateResponse } from '../interfaces'
+import { TranslateResponse } from '../interfaces'
 
 const useStyles = makeStyles({
   root: {
@@ -42,13 +42,13 @@ const healthDict: Record<number, { text: string }> = {
   },
 }
 
-function App(): JSX.Element {
-  const [healthResponse, setHealthResponse] = useState<AxiosResponse<ITranslateResponse> | null>(null)
+export function App(): JSX.Element {
+  const [healthResponse, setHealthResponse] = useState<AxiosResponse<TranslateResponse> | null>(null)
 
   useEffect(() => {
     async function getHealthStatus() {
       await axios
-        .post<ITranslateResponse>('/api/translate', { message: 'Translate me now!', from: 'en', to: 'pt' })
+        .post<TranslateResponse>('/api/translate', { message: 'Translate me now!', from: 'en', to: 'pt' })
         .then((response) => {
           setHealthResponse(response)
         })
@@ -110,5 +110,3 @@ function App(): JSX.Element {
     </Container>
   )
 }
-
-export default App

@@ -1,16 +1,16 @@
-export interface ITranslateOptions {
+export interface TranslateOptions {
   message: string
   from: string
   to: string
 }
 
-export interface ITransResult {
+export interface TransResult {
   dst: string
   src: string
 }
 
-export interface ITranslateResponse {
+export interface TranslateResponse {
   from: string
   to: string
-  trans_result: ITransResult
+  trans_result: TransResult
 }

@@ -2,20 +2,20 @@ import fs from 'fs'
 import path from 'path'
 import { VercelRequest, VercelResponse } from '@vercel/node'
 import { Logger } from '../logging/Logging.logger'
-import { ITranslateOptions } from '../../interfaces'
+import { TranslateOptions } from '../../interfaces'
 
 export const returnHttpJson = (res: VercelResponse, status: number, payload: unknown): VercelResponse => {
   return res.status(status).json(payload)
 }
 
-export const returnEndpointPayload = ({ req }: { req: VercelRequest }): Promise<ITranslateOptions> => {
+export const returnEndpointPayload = async ({ req }: { req: VercelRequest }): Promise<TranslateOptions> => {
   return new Promise((resolve, reject) => {
     if (Object.keys(req.body || {}).length > 0) {
-      resolve(req.body as ITranslateOptions)
+      resolve(req.body as TranslateOptions)
     }
 
     if (Object.keys(req.query || {}).length > 0) {
-      resolve(req.query as unknown as ITranslateOptions)
+      resolve(req.query as unknown as TranslateOptions)
     }
 
     reject(
@@ -50,7 +50,7 @@ export const returnHtmlPage = ({ res }: { res: VercelResponse }): void => {
   })
 }
 
-export const transformRequest = (
+export const transformRequest = async (
   req: VercelRequest,
   res: VercelResponse,
   method?: string,

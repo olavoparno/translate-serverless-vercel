@@ -1,26 +1,26 @@
 declare module '@vitalets/google-translate-api' {
-  export interface IHTTPOptions {
+  export interface HTTPOptions {
     from?: string
     to?: string
   }
 
-  export interface ITranslateHTTPLanguage {
+  export interface TranslateHTTPLanguage {
     didYouMean: boolean
     iso: string
   }
 
-  export interface ITranslateHTTPText {
+  export interface TranslateHTTPText {
     autoCorrected: boolean
     value: string
     didYouMean: boolean
   }
 
-  export interface ITranslateHTTPResponse {
+  export interface TranslateHTTPResponse {
     text: string
     pronunciation: string
     from: {
-      language: ITranslateHTTPLanguage
-      text: ITranslateHTTPText
+      language: TranslateHTTPLanguage
+      text: TranslateHTTPText
     }
     raw: string
   }
@@ -134,5 +134,5 @@ declare module '@vitalets/google-translate-api' {
     zu = 'Zulu',
   }
 
-  export default function translate(query: string, opts?: IHTTPOptions): Promise<ITranslateHTTPResponse>
+  export default function translate(query: string, opts?: HTTPOptions): Promise<TranslateHTTPResponse>
 }

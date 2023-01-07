@@ -1,8 +1,8 @@
 import translate from '@vitalets/google-translate-api'
 import { Logger } from '../logging/Logging.logger'
-import { ITranslateOptions, ITranslateResponse } from '../../interfaces'
+import { TranslateOptions, TranslateResponse } from '../../interfaces'
 
-export const translateService = ({ message, from, to }: ITranslateOptions): Promise<ITranslateResponse> => {
+export const translateService = async ({ message, from, to }: TranslateOptions): Promise<TranslateResponse> => {
   return translate(message, {
     from,
     to,
@@ -30,7 +30,7 @@ export const translateService = ({ message, from, to }: ITranslateOptions): Prom
     })
 }
 
-export const translateTriage = ({ message, from, to }: ITranslateOptions): Promise<ITranslateOptions> => {
+export const translateTriage = async ({ message, from, to }: TranslateOptions): Promise<TranslateOptions> => {
   return new Promise((resolve, reject) => {
     if (from === to) {
       Logger.info('NoTranslationMade::')

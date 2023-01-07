@@ -1,9 +1,9 @@
 import { RedisManager } from './Redis.instance'
-import { ITranslateResponse, ITranslateOptions } from '../../interfaces'
+import { TranslateResponse, TranslateOptions } from '../../interfaces'
 
 const redisClient = RedisManager()
 
-export const redisGet = ({ message, from, to }: ITranslateOptions): Promise<ITranslateOptions> => {
+export const redisGet = ({ message, from, to }: TranslateOptions): Promise<TranslateOptions> => {
   return new Promise((resolve, reject) => {
     const getKey = JSON.stringify({ cFrom: from, cTo: to, cSrc: message })
 
@@ -34,7 +34,7 @@ export const redisGet = ({ message, from, to }: ITranslateOptions): Promise<ITra
   })
 }
 
-export const redisSet = ({ from, to, trans_result }: ITranslateResponse): Promise<ITranslateResponse> => {
+export const redisSet = ({ from, to, trans_result }: TranslateResponse): Promise<TranslateResponse> => {
   return new Promise((resolve, reject) => {
     const { src, dst } = trans_result
     const setKey = JSON.stringify({
@@ -44,11 +44,11 @@ export const redisSet = ({ from, to, trans_result }: ITranslateResponse): Promis
     })
 
     redisClient
-      .set(setKey, dst, 'ex', 2612345)
+      .set(setKey, dst, 'EX', 2612345)
       .then(() => {
         resolve({ from, to, trans_result })
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         reject(
           new Error(
             JSON.stringify({
