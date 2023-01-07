@@ -2,9 +2,9 @@ import fs from 'fs'
 import path from 'path'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { Logger } from '../logging/Logging.logger'
-import { TranslateOptions } from '../../../interfaces'
+import { TranslateOptions } from '../../interfaces'
 
-export const returnHttpJson = (res: NextApiResponse, status: number, payload: unknown): NextApiResponse => {
+export const returnHttpJson = (res: NextApiResponse, status: number, payload: unknown) => {
   return res.status(status).json(payload)
 }
 

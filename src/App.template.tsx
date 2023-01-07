@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import {
   Container,
   Grid,
@@ -13,10 +12,9 @@ import {
   makeStyles,
 } from '@material-ui/core'
 import GitHubIcon from '@material-ui/icons/GitHub'
-import axios, { AxiosResponse } from 'axios'
-import { LoadingComponent } from './common/loading/Loading.Loading.component'
-import { TranslateResponse } from '../interfaces'
 import { useSwr } from './hooks/useSwr'
+import { LoadingComponent } from './common/loading/Loading.Loading.component'
+import { TranslateResponse } from './interfaces'
 
 const useStyles = makeStyles({
   root: {
@@ -31,39 +29,25 @@ const useStyles = makeStyles({
   },
 })
 
-const healthDict: Record<number, { text: string }> = {
+const healthDict = {
   200: {
     text: 'running',
   },
   500: {
     text: 'broken',
   },
-  0: {
-    text: 'broken...',
+  default: {
+    text: 'broken',
   },
 }
 
 export function AppTemplate(): JSX.Element {
-  const [healthResponse, setHealthResponse] = useState<AxiosResponse<TranslateResponse> | null>(null)
-  const { data, error, isLoading } = useSwr('/api/translate', { message: 'Translate me now!', from: 'en', to: 'pt' })
+  const { data, error, isLoading } = useSwr<{ information: string; translation: TranslateResponse }>('/api/translate', {
+    message: 'Translate me now!',
+    from: 'en',
+    to: 'pt',
+  })
   const classes = useStyles()
-
-  useEffect(() => {
-    async function getHealthStatus() {
-      await axios
-        .post<TranslateResponse>('/api/translate', { message: 'Translate me now!', from: 'en', to: 'pt' })
-        .then((response) => {
-          setHealthResponse(response)
-        })
-        .catch((error) => {
-          console.log('error', { error })
-          const errorResponse = error?.response || { response: { status: 500 } }
-          setHealthResponse(errorResponse)
-        })
-    }
-
-    getHealthStatus()
-  }, [setHealthResponse])
 
   if (isLoading || !data) {
     return (
@@ -75,50 +59,47 @@ export function AppTemplate(): JSX.Element {
     )
   }
 
-  console.log('data', data)
+  const { information } = data
+
+  const healthStatus = information === 'From cache.' ? 200 : 500
 
   return (
     <Container className={classes.container}>
       <Grid container justifyContent="center" alignItems="center" direction="column">
-        {data && (
-          <Fade in={data !== null} timeout={500}>
-            <Card className={classes.root}>
-              <CardMedia
-                component="img"
-                className={classes.media}
-                // image={`https://http.cat/${healthResponse.status}`}
-                title="Current API Status"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                  Translate Serverless Vercel
-                </Typography>
-                <Typography gutterBottom variant="body2" component="p">
-                  Serverless Translation API using Vercel's API
-                </Typography>
+        <Fade in={data !== null} timeout={500}>
+          <Card className={classes.root}>
+            <CardMedia
+              component="img"
+              className={classes.media}
+              image={`https://http.cat/${healthStatus}`}
+              title="Current API Status"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                Translate Serverless Vercel
+              </Typography>
+              <Typography gutterBottom variant="body2" component="p">
+                Serverless Translation API using Vercel's API
+              </Typography>
+              <Typography variant="body2" component="p" color="textSecondary">
+                The project is currently:{' '}
+                {healthDict[healthStatus] ? healthDict[healthStatus].text : healthDict.default.text}
+              </Typography>
+              {healthDict[healthStatus] && (
                 <Typography variant="body2" component="p" color="textSecondary">
-                  The project is currently:{' '}
-                  {/* {healthDict[healthResponse?.status] ? healthDict[healthResponse.status].text : healthDict[0].text} */}
+                  Status Text: {healthStatus}
                 </Typography>
-                {healthResponse?.statusText && (
-                  <Typography variant="body2" component="p" color="textSecondary">
-                    Status Text: {healthResponse?.statusText}
-                  </Typography>
-                )}
-              </CardContent>
-              <CardActions>
-                <Tooltip title="Readme!" placement="top-end">
-                  <IconButton
-                    href="https://github.com/olavoparno/translate-serverless-vercel/blob/master/README.md"
-                    aria-label="readme"
-                  >
-                    <GitHubIcon />
-                  </IconButton>
-                </Tooltip>
-              </CardActions>
-            </Card>
-          </Fade>
-        )}
+              )}
+            </CardContent>
+            <CardActions>
+              <Tooltip title="Project" placement="top-end">
+                <IconButton href="https://github.com/olavoparno/translate-serverless-vercel" aria-label="readme">
+                  <GitHubIcon />
+                </IconButton>
+              </Tooltip>
+            </CardActions>
+          </Card>
+        </Fade>
       </Grid>
     </Container>
   )

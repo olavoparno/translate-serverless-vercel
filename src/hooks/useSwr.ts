@@ -1,8 +1,8 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios from 'axios'
 import useSWR, { Fetcher } from 'swr'
 
 export const baseRequest = axios.create({
-  baseURL: '/api',
+  baseURL: '/',
 })
 
 export function useSwrFactory<T>(key: string, fetcher: Fetcher<T>) {
@@ -13,13 +13,13 @@ export function useSwrFactory<T>(key: string, fetcher: Fetcher<T>) {
   return response
 }
 
-export function useSwr<T, D>(key: string, data?: D) {
+export function useSwr<T>(key: string, data?: any) {
   const fetcher = (url: string) =>
     baseRequest
       .post(`${url}`, data)
       .then(({ data }) => data)
       .catch((error) => {
-        throw new Error(error.response.data.messag)
+        throw new Error(error.response.data.message)
       })
 
   return useSwrFactory<T>(key, fetcher)

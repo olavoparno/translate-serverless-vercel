@@ -1,6 +1,6 @@
 import translate from '@vitalets/google-translate-api'
 import { Logger } from '../logging/Logging.logger'
-import { TranslateOptions, TranslateResponse } from '../../../interfaces'
+import { TranslateOptions, TranslateResponse } from '../../interfaces'
 
 export const translateService = async ({ message, from, to }: TranslateOptions): Promise<TranslateResponse> => {
   return translate(message, {
