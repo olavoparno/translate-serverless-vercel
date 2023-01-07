@@ -1,14 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { Logger } from '../../services/logging/Logging.logger'
+import { Logger } from '../../src/services/logging/Logging.logger'
 import {
   returnEndpointPayload,
   transformRequest,
   returnHttpJson,
   handleRejections,
   allowCors,
-} from '../../services/http/Http.facilitators'
-import { translateTriage, translateService } from '../../services/translator/Translator.service'
-import { redisGet, redisSet } from '../../services/redis/Redis.actions'
+} from '../../src/services/http/Http.facilitators'
+import { translateTriage, translateService } from '../../src/services/translator/Translator.service'
+import { redisGet, redisSet } from '../../src/services/redis/Redis.actions'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   return Promise.resolve(transformRequest(req, res))

@@ -16,6 +16,7 @@ import GitHubIcon from '@material-ui/icons/GitHub'
 import axios, { AxiosResponse } from 'axios'
 import { LoadingComponent } from './common/loading/Loading.Loading.component'
 import { TranslateResponse } from '../interfaces'
+import { useSwr } from './hooks/useSwr'
 
 const useStyles = makeStyles({
   root: {
@@ -44,6 +45,8 @@ const healthDict: Record<number, { text: string }> = {
 
 export function AppTemplate(): JSX.Element {
   const [healthResponse, setHealthResponse] = useState<AxiosResponse<TranslateResponse> | null>(null)
+  const { data, error, isLoading } = useSwr('/api/translate', { message: 'Translate me now!', from: 'en', to: 'pt' })
+  const classes = useStyles()
 
   useEffect(() => {
     async function getHealthStatus() {
@@ -62,19 +65,28 @@ export function AppTemplate(): JSX.Element {
     getHealthStatus()
   }, [setHealthResponse])
 
-  const classes = useStyles()
+  if (isLoading || !data) {
+    return (
+      <Container className={classes.container}>
+        <Grid container justifyContent="center" alignItems="center" direction="column">
+          <LoadingComponent />
+        </Grid>
+      </Container>
+    )
+  }
+
+  console.log('data', data)
 
   return (
     <Container className={classes.container}>
       <Grid container justifyContent="center" alignItems="center" direction="column">
-        {healthResponse === null && <LoadingComponent />}
-        {healthResponse && (
-          <Fade in={healthResponse !== null} timeout={500}>
+        {data && (
+          <Fade in={data !== null} timeout={500}>
             <Card className={classes.root}>
               <CardMedia
                 component="img"
                 className={classes.media}
-                image={`https://http.cat/${healthResponse.status}`}
+                // image={`https://http.cat/${healthResponse.status}`}
                 title="Current API Status"
               />
               <CardContent>
@@ -86,7 +98,7 @@ export function AppTemplate(): JSX.Element {
                 </Typography>
                 <Typography variant="body2" component="p" color="textSecondary">
                   The project is currently:{' '}
-                  {healthDict[healthResponse?.status] ? healthDict[healthResponse.status].text : healthDict[0].text}
+                  {/* {healthDict[healthResponse?.status] ? healthDict[healthResponse.status].text : healthDict[0].text} */}
                 </Typography>
                 {healthResponse?.statusText && (
                   <Typography variant="body2" component="p" color="textSecondary">
