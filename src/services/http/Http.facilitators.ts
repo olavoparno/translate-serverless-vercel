@@ -68,22 +68,33 @@ export const returnHtmlPage = ({ res }: { res: NextApiResponse }): void => {
 
 export const transformRequest = async (
   req: NextApiRequest,
-  res: NextApiResponse,
-  method?: string
+  res: NextApiResponse
 ): Promise<{ req: NextApiRequest; res: NextApiResponse }> => {
   return new Promise((resolve, reject) => {
     req.on("data", () => {
       Logger.info("TransactionOpened::");
     });
+
     res.on("close", () => {
       Logger.info("TransactionClosed");
     });
+
     res.on("error", (error) => {
       Logger.error("TransactionError::");
       Logger.error(JSON.stringify(error));
     });
 
-    if (req.method !== (method || "POST")) {
+    const allowedMethods = [
+      "GET",
+      "HEAD",
+      "OPTIONS",
+      "POST",
+      "PUT",
+      "DELETE",
+      "PATCH",
+    ];
+
+    if (!allowedMethods.includes(req.method || "")) {
       reject(
         new Error(
           JSON.stringify({
