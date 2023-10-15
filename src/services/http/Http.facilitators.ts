@@ -1,21 +1,29 @@
-import fs from 'fs'
-import path from 'path'
-import { NextApiRequest, NextApiResponse } from 'next'
-import { Logger } from '../logging/Logging.logger'
-import { TranslateOptions } from '../../interfaces'
+import fs from "fs";
+import path from "path";
+import { NextApiRequest, NextApiResponse } from "next";
+import { Logger } from "../logging/Logging.logger";
+import { TranslateOptions } from "../../interfaces";
 
-export const returnHttpJson = (res: NextApiResponse, status: number, payload: unknown) => {
-  return res.status(status).json(payload)
-}
+export const returnHttpJson = (
+  res: NextApiResponse,
+  status: number,
+  payload: unknown
+) => {
+  return res.status(status).json(payload);
+};
 
-export const returnEndpointPayload = async ({ req }: { req: NextApiRequest }): Promise<TranslateOptions> => {
+export const returnEndpointPayload = async ({
+  req,
+}: {
+  req: NextApiRequest;
+}): Promise<TranslateOptions> => {
   return new Promise((resolve, reject) => {
     if (Object.keys(req.body || {}).length > 0) {
-      resolve(req.body as TranslateOptions)
+      resolve(req.body as TranslateOptions);
     }
 
     if (Object.keys(req.query || {}).length > 0) {
-      resolve(req.query as unknown as TranslateOptions)
+      resolve(req.query as unknown as TranslateOptions);
     }
 
     reject(
@@ -23,92 +31,105 @@ export const returnEndpointPayload = async ({ req }: { req: NextApiRequest }): P
         JSON.stringify({
           status: 400,
           data: {
-            information: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-vercel',
-            complementary: 'Tip: you should review your payload information',
+            information:
+              "Refer to the documentation https://github.com/olavoparno/translate-serverless-vercel",
+            complementary: "Tip: you should review your payload information",
           },
-        }),
-      ),
-    )
-  })
-}
+        })
+      )
+    );
+  });
+};
 
 export const returnHtmlPage = ({ res }: { res: NextApiResponse }): void => {
-  res.writeHead(418, { 'Content-Type': 'text/html', 'Cache-Control': 'max-age=0, s-maxage=2612345' })
+  res.writeHead(418, {
+    "Content-Type": "text/html",
+    "Cache-Control": "max-age=0, s-maxage=2612345",
+  });
 
-  return fs.readFile(path.join(__dirname, '../../public/index.html'), null, (fsError, data) => {
-    if (fsError) {
-      Logger.error('ReadHTMLFailure::')
-      Logger.error(JSON.stringify(fsError))
+  return fs.readFile(
+    path.join(__dirname, "../../public/index.html"),
+    null,
+    (fsError, data) => {
+      if (fsError) {
+        Logger.error("ReadHTMLFailure::");
+        Logger.error(JSON.stringify(fsError));
 
-      res.writeHead(404)
-      res.write('Whoops! File not found!')
-    } else {
-      res.write(data)
+        res.writeHead(404);
+        res.write("Whoops! File not found!");
+      } else {
+        res.write(data);
+      }
+
+      return res.end();
     }
-
-    return res.end()
-  })
-}
+  );
+};
 
 export const transformRequest = async (
   req: NextApiRequest,
   res: NextApiResponse,
-  method?: string,
+  method?: string
 ): Promise<{ req: NextApiRequest; res: NextApiResponse }> => {
   return new Promise((resolve, reject) => {
-    req.on('data', () => {
-      Logger.info('TransactionOpened::')
-    })
-    res.on('close', () => {
-      Logger.info('TransactionClosed')
-    })
-    res.on('error', (error) => {
-      Logger.error('TransactionError::')
-      Logger.error(JSON.stringify(error))
-    })
+    req.on("data", () => {
+      Logger.info("TransactionOpened::");
+    });
+    res.on("close", () => {
+      Logger.info("TransactionClosed");
+    });
+    res.on("error", (error) => {
+      Logger.error("TransactionError::");
+      Logger.error(JSON.stringify(error));
+    });
 
-    if (req.method !== (method || 'POST')) {
+    if (req.method !== (method || "POST")) {
       reject(
         new Error(
           JSON.stringify({
             status: 405,
             data: {
-              information: 'Refer to the documentation https://github.com/olavoparno/translate-serverless-vercel',
+              information:
+                "Refer to the documentation https://github.com/olavoparno/translate-serverless-vercel",
             },
-          }),
-        ),
-      )
+          })
+        )
+      );
     }
 
-    resolve({ req, res })
-  })
-}
+    resolve({ req, res });
+  });
+};
 
 export const handleRejections =
   (res: NextApiResponse) =>
   (error: Error): void => {
-    const parsedError = JSON.parse(error.toString().replace('Error: ', ''))
+    const parsedError = JSON.parse(error.toString().replace("Error: ", ""));
 
-    Logger.info('HandleRejections::')
-    Logger.info(JSON.stringify(parsedError))
+    Logger.info("HandleRejections::");
+    Logger.info(JSON.stringify(parsedError));
 
-    returnHttpJson(res, parsedError.status, parsedError.data)
-  }
+    returnHttpJson(res, parsedError.status, parsedError.data);
+  };
 
 export const allowCors =
-  (fn: (req: NextApiRequest, res: NextApiResponse) => Promise<void | NextApiResponse>) =>
+  (
+    fn: (
+      req: NextApiRequest,
+      res: NextApiResponse
+    ) => Promise<void | NextApiResponse>
+  ) =>
   async (req: NextApiRequest, res: NextApiResponse) => {
-    res.setHeader('Access-Control-Allow-Credentials', 'true')
-    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Origin", "*");
 
-    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS,POST')
+    res.setHeader("Access-Control-Allow-Methods", "OPTIONS,POST");
     res.setHeader(
-      'Access-Control-Allow-Headers',
-      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
-    )
-    if (req.method === 'OPTIONS') {
-      res.status(200).end()
-      return
+      "Access-Control-Allow-Headers",
+      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+    );
+    if (req.method === "OPTIONS") {
+      return res.status(200).end();
     }
-    return await fn(req, res)
-  }
+    return await fn(req, res);
+  };
