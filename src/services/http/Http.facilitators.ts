@@ -68,33 +68,22 @@ export const returnHtmlPage = ({ res }: { res: NextApiResponse }): void => {
 
 export const transformRequest = async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
+  method?: string
 ): Promise<{ req: NextApiRequest; res: NextApiResponse }> => {
   return new Promise((resolve, reject) => {
     req.on("data", () => {
       Logger.info("TransactionOpened::");
     });
-
     res.on("close", () => {
       Logger.info("TransactionClosed");
     });
-
     res.on("error", (error) => {
       Logger.error("TransactionError::");
       Logger.error(JSON.stringify(error));
     });
 
-    const allowedMethods = [
-      "GET",
-      "HEAD",
-      "OPTIONS",
-      "POST",
-      "PUT",
-      "DELETE",
-      "PATCH",
-    ];
-
-    if (!allowedMethods.includes(req.method || "")) {
+    if (req.method !== (method || "POST")) {
       reject(
         new Error(
           JSON.stringify({
@@ -134,17 +123,14 @@ export const allowCors =
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Allow-Origin", "*");
 
-    res.setHeader(
-      "Access-Control-Allow-Methods",
-      "GET,HEAD,OPTIONS,POST,PUT,DELETE,PATCH"
-    );
+    res.setHeader("Access-Control-Allow-Methods", "OPTIONS,POST");
     res.setHeader(
       "Access-Control-Allow-Headers",
-      "Origin,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Content-Type,Date,X-Api-Version"
+      "Origin,X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
     );
     if (req.method === "OPTIONS") {
-      return res.status(200).json({});
+      res.status(200).end();
+      return;
     }
-
     return await fn(req, res);
   };

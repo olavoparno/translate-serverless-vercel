@@ -32,7 +32,7 @@
     "@emotion/styled": "latest",
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
-    "@vitalets/google-translate-api": "^9.0.0",
+    "@vitalets/google-translate-api": "^9.2.0",
     "axios": "^1.2.2",
     "ioredis": "^5.2.4",
     "logform": "^2.4.2",
