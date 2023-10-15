@@ -87,7 +87,7 @@ export const transformRequest = async (
       reject(
         new Error(
           JSON.stringify({
-            status: 400,
+            status: 405,
             data: {
               information:
                 "Refer to the documentation https://github.com/olavoparno/translate-serverless-vercel",
