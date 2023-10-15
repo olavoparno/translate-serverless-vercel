@@ -143,7 +143,7 @@ export const allowCors =
       "Origin,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Content-Type,Date,X-Api-Version"
     );
     if (req.method === "OPTIONS") {
-      return res.status(200).end();
+      return res.status(200).json({});
     }
 
     return await fn(req, res);
