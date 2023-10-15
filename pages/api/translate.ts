@@ -14,8 +14,6 @@ import {
 import { redisGet, redisSet } from "../../src/services/redis/Redis.actions";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  await allowCors(req, res);
-
   return Promise.resolve(transformRequest(req, res))
     .then(returnEndpointPayload)
     .then((translateData) => {
@@ -53,4 +51,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     .catch(handleRejections(res));
 };
 
-export default handler;
+export default allowCors(handler);
