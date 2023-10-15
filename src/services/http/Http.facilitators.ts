@@ -87,7 +87,7 @@ export const transformRequest = async (
       reject(
         new Error(
           JSON.stringify({
-            status: 405,
+            status: 400,
             data: {
               information:
                 "Refer to the documentation https://github.com/olavoparno/translate-serverless-vercel",
@@ -112,24 +112,21 @@ export const handleRejections =
     returnHttpJson(res, parsedError.status, parsedError.data);
   };
 
-export const allowCors =
-  (
-    fn: (
-      req: NextApiRequest,
-      res: NextApiResponse
-    ) => Promise<void | NextApiResponse>
-  ) =>
-  async (req: NextApiRequest, res: NextApiResponse) => {
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Origin", "*");
+export const allowCors = async (req: NextApiRequest, res: NextApiResponse) => {
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,HEAD,OPTIONS,POST,PUT,DELETE,PATCH"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
 
-    res.setHeader("Access-Control-Allow-Methods", "OPTIONS,POST");
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
-    );
-    if (req.method === "OPTIONS") {
-      return res.status(200).end();
-    }
-    return await fn(req, res);
-  };
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  return null;
+};
